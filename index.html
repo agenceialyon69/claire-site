@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claire — Assistant automatisé pour l'accueil patient en cabinet dentaire | Lyon</title>
-<meta name="description" content="Claire est un assistant automatisé qui prend en charge les demandes simples de vos patients 24h/24. Offre de lancement réservée aux 5 premiers cabinets partenaires à Lyon.">
+<meta name="description" content="Claire est un assistant automatisé qui prend en charge les demandes simples de vos patients 24h/24, en restant un complément à votre secrétariat. Offre de lancement réservée aux 5 premiers cabinets partenaires à Lyon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -223,14 +223,9 @@ margin: 0 auto 16px; font-family: var(--serif); font-style: italic; font-size: 2
 .obs-card p { font-size: 14px; color: var(--slate); }
 .dash-footnote { text-align: center; margin-top: 24px; font-size: 12px; color: var(--slate); opacity: 0.7; font-style: italic; }
 
-/* How It Works */
-.how-step { text-align: center; padding: 24px; }
-.how-num {
-font-family: var(--serif); font-size: 44px; font-style: italic;
-font-weight: 500; color: var(--gold); line-height: 1; margin-bottom: 14px;
-}
-.how-step h3 { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--forest); margin-bottom: 10px; letter-spacing: -0.01em; }
-.how-step p { font-size: 14px; line-height: 1.6; color: var(--slate); }
+/* Value card */
+.value-card { padding: 40px; background: var(--cream-warm); border-radius: 16px; text-align: center; max-width: 720px; margin: 0 auto; }
+.value-card p { font-size: 18px; line-height: 1.7; color: var(--slate); }
 
 /* Pricing */
 .price-card {
@@ -314,6 +309,30 @@ color: rgba(245, 240, 232, 0.6); font-size: 13px; text-align: center;
 border-top: 1px solid rgba(255,255,255,0.05);
 }
 footer a { color: var(--gold); }
+
+/* Mobile responsive fixes */
+@media (max-width: 560px) {
+.chat-wrapper {
+width: 100%;
+max-width: 100%;
+margin: 0 10px;
+}
+.chat-messages { height: 320px; }
+.chat-bubble {
+max-width: 90%;
+padding: 8px 12px;
+font-size: 13px;
+}
+.demo-note { font-size: 12px; }
+}
+
+@media (max-width: 600px) {
+.section { padding: 60px 0; }
+.section-header { margin-bottom: 40px; }
+.hero h1 { font-size: 32px; }
+.hero-subtitle,
+.section-lead { font-size: 16px; }
+}
 </style>
 </head>
 <body>
@@ -334,10 +353,10 @@ footer a { color: var(--gold); }
 <!-- Hero -->
 <section class="hero">
 <div class="container">
-<div class="hero-eyebrow">⊛ 5 cabinets partenaires maximum à Lyon</div>
+<div class="hero-eyebrow">⊛ 5 cabinets partenaires à Lyon</div>
 <h1>Répondez à vos patients, <em>même quand votre secrétariat est débordé.</em></h1>
-<p class="hero-tagline">Pensée comme un renfort pour les cabinets dentaires — pas comme un remplacement du secrétariat.</p>
-<p class="hero-subtitle">Claire prend en charge les demandes simples, filtre les questions répétitives et transmet les situations importantes à votre équipe.</p>
+<p class="hero-tagline">Un assistant automatisé qui complète votre accueil patient, sans remplacer votre équipe.</p>
+<p class="hero-subtitle">Claire prend en charge les demandes simples, filtre les questions répétitives et transmet les situations importantes à votre équipe. Pensée comme un renfort pour les cabinets dentaires — pas comme un remplacement du secrétariat.</p>
 <div class="hero-ctas">
 <a href="#demo" class="btn-primary">Tester la démonstration</a>
 <a href="https://calendly.com/contact-claireassistante/demo-claire-10-minutes" target="_blank" rel="noopener" class="btn-gold">Réserver une démo</a>
@@ -611,44 +630,44 @@ msg = msg.toLowerCase();
 if (msg.includes("horaire") || msg.includes("ouvert") || msg.includes("samedi")) return "Le cabinet est ouvert " + clinic.hours + ". Souhaitez-vous prendre rendez-vous ?";
 if (msg.includes("détartrage")) return "Un détartrage coûte généralement entre 60€ et 90€ selon le soin nécessaire. Le praticien vous confirmera cela lors de la consultation. Souhaitez-vous prendre rendez-vous ?";
 if (msg.includes("couronne")) return "Une couronne céramique coûte généralement entre 500 et 800€. Le devis précis se fait en consultation. Voulez-vous prendre rendez-vous ?";
-if (msg.includes("tarif") || msg.includes("prix") || msg.includes("combien")) return "Les tarifs varient selon le soin. Une consultation est à 30€, un détartrage entre 60 et 90€. Pour un devis précis, le mieux est de prendre rendez-vous. Voulez-vous en réserver un ?";
-if (msg.includes("adresse") || msg.includes("où")) return "Nous sommes situés au " + clinic.address + ". Voulez-vous un itinéraire ?";
+if (msg.includes("tarif") || msg.includes("prix") || msg.includes("combien")) return "Les tarifs varient selon le type de soin et le cabinet. Je ne peux pas donner un montant exact sans diagnostic. Souhaitez-vous que je vous aide à prendre rendez-vous, ou que je transmette votre demande de devis au cabinet ?";
+if (msg.includes("adresse") || msg.includes("où")) return "Nous sommes situés au " + clinic.address + ". Souhaitez-vous un itinéraire ou que je vous aide à réserver un rendez-vous ?";
 return null;
 }
 
 function handleFlow(msg) {
 if (state.mode === "urgence") {
-if (state.step === 0) { state.step++; return "D'accord. Est-ce que vous avez un gonflement ou une douleur très forte ?"; }
-if (state.step === 1) { state.step++; return "Depuis quand cela dure-t-il ?"; }
-if (state.step === 2) { resetState(); return "Je vais organiser une prise en charge rapide. Pouvez-vous me donner votre nom et votre numéro ?"; }
+if (state.step === 0) { state.step++; return "Je comprends que ce soit inquiétant. Avez-vous un gonflement, un saignement important ou une douleur très forte depuis moins de 24h ?"; }
+if (state.step === 1) { state.step++; return "Merci pour ces précisions. En cas de doute sur une urgence, il est recommandé de contacter le 15 ou le Samu avant de vous déplacer. Souhaitez-vous que je vous aide à préparer un message pour le cabinet, à transmettre dès que possible ?"; }
+if (state.step === 2) { resetState(); return "Je vais transmettre votre demande au cabinet. Pouvez-vous me donner votre nom et votre numéro de téléphone ?"; }
 }
 if (state.mode === "douleur") {
-if (state.step === 0) { state.step++; return "Depuis combien de temps avez-vous mal ?"; }
-if (state.step === 1) { state.step++; return "Est-ce que ça fait plus mal au chaud ou au froid ?"; }
-if (state.step === 2) { resetState(); return "D'accord. Je peux vous proposer un rendez-vous. Votre nom et numéro ?"; }
+if (state.step === 0) { state.step++; return "Je comprends votre douleur. Depuis quand avez-vous mal à cette dent ou à cette zone ?"; }
+if (state.step === 1) { state.step++; return "Merci. Cette douleur est-elle localisée sur une seule dent, ou plus diffuse dans la mâchoire ?"; }
+if (state.step === 2) { resetState(); return "Merci. Dans ce cas, il est préférable de programmer un rendez-vous avec le cabinet pour un examen. Voulez-vous que je vous aide à réserver un créneau ?"; }
 }
 if (state.mode === "rdv") {
-if (state.step === 0) { state.step++; return "Bien sûr. Pour quel motif souhaitez-vous venir ? (contrôle, détartrage, douleur, autre)"; }
-if (state.step === 1) { resetState(); return "Je vous remercie. Pouvez-vous me donner votre nom et votre numéro de téléphone ? Le secrétariat vous recontactera pour confirmer le rendez-vous."; }
+if (state.step === 0) { state.step++; return "Très bien. Pour quel motif souhaitez-vous venir au cabinet dentaire ? (contrôle, détartrage, douleur, problème de prothèse, autre)"; }
+if (state.step === 1) { resetState(); return "Parfait. Préférez-vous un créneau le matin ou l'après-midi, et dans les prochains jours ou plus tard dans le mois ?"; }
 }
-if (state.mode === "lead") { resetState(); return "Merci pour ces informations. Le secrétariat va vous recontacter rapidement."; }
+if (state.mode === "lead") { resetState(); return "Merci pour ces informations. Votre demande a été transmise au cabinet. L'équipe vous recontactera dès que possible."; }
 return null;
 }
 
 function fallback(msg) {
-if (msg.toLowerCase().includes("merci")) { resetState(); return "Avec plaisir. N'hésitez pas si besoin."; }
+if (msg.toLowerCase().includes("merci")) { resetState(); return "Je vous en prie. N'hésitez pas à revenir si vous avez besoin d'aide. Puis-je vous aider pour autre chose ?"; }
 state.mode = "lead"; state.step = 0;
-return "Je peux transmettre votre demande au cabinet. Pouvez-vous me donner votre nom et votre numéro ?";
+return "Je peux transmettre votre demande au cabinet, qui vous répondra directement. Pourriez-vous me donner votre nom et votre numéro de téléphone, s'il vous plaît ?";
 }
 
 function reply(msg) {
 let flow = handleFlow(msg); if (flow) return flow;
 let direct = directReply(msg); if (direct) { resetState(); return direct; }
 let intent = detectIntent(msg);
-if (intent === "urgence") { resetState(); state.mode = "urgence"; state.step = 0; return "Je comprends, je vais vous aider rapidement."; }
-if (intent === "douleur") { resetState(); state.mode = "douleur"; state.step = 0; return "Je comprends votre douleur. Je vais vous poser quelques questions."; }
-if (intent === "rdv") { resetState(); state.mode = "rdv"; state.step = 0; return "Très bien. Je vais vous poser quelques questions pour organiser cela."; }
-if (intent === "thanks") { resetState(); return "Avec plaisir. N'hésitez pas si besoin."; }
+if (intent === "urgence") { resetState(); state.mode = "urgence"; state.step = 0; return "Je comprends que ce soit inquiétant. Avez-vous un gonflement, un saignement important ou une douleur très forte depuis moins de 24h ?"; }
+if (intent === "douleur") { resetState(); state.mode = "douleur"; state.step = 0; return "Je comprends votre douleur. Depuis quand avez-vous mal à cette dent ou à cette zone ?"; }
+if (intent === "rdv") { resetState(); state.mode = "rdv"; state.step = 0; return "Très bien. Pour quel motif souhaitez-vous venir au cabinet dentaire ? (contrôle, détartrage, douleur, problème de prothèse, autre)"; }
+if (intent === "thanks") { resetState(); return "Je vous en prie. N'hésitez pas à revenir si vous avez besoin d'aide."; }
 return fallback(msg);
 }
 
