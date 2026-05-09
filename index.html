@@ -3,488 +3,924 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claire — L’accueil patient nouvelle génération | Lyon</title>
-<meta name="description" content="Claire répond aux demandes simples de vos patients 24h/24 et transmet les cas importants à votre équipe. Offre fondateur à Lyon.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Claire — Assistante patient 24/7 pour cabinets dentaires | Lyon</title>
+<meta name="description" content="Claire répond aux patients 24/7, qualifie les demandes et aide les cabinets dentaires à réduire les appels manqués et augmenter les rendez-vous.">
+
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" defer></script>
+
 <style>
-:root{--forest:#1f3d35;--forest-deep:#15291f;--cream:#f5f0e8;--cream-warm:#ede5d3;--charcoal:#1a1a1a;--slate:#4a4a4a;--gold:#c4945a;--serif:'Fraunces',Georgia,serif;--sans:'Inter Tight',-apple-system,sans-serif}
+:root{
+--forest:#1f3d35;
+--forest-deep:#15291f;
+--cream:#f5f0e8;
+--gold:#c4945a;
+--slate:#4a4a4a;
+--charcoal:#1a1a1a;
+--serif:'Fraunces',Georgia,serif;
+--sans:'Inter Tight',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--cream);color:var(--charcoal);line-height:1.5;-webkit-font-smoothing:antialiased}
-.container{max-width:1180px;margin:0 auto;padding:0 32px}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none}
-section{scroll-margin-top:100px}
+body{
+font-family:var(--sans);
+background:var(--cream);
+color:var(--charcoal);
+line-height:1.55;
+-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility;
+}
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+section{padding:80px 0;scroll-margin-top:96px}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;background:rgba(245,240,232,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(31,61,53,.08)}
-.nav-inner{max-width:1180px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--forest);letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
-.logo-mark{width:32px;height:32px;background:var(--forest);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--cream);font-family:var(--serif);font-style:italic;font-weight:500;font-size:16px}
-.nav-links{display:flex;gap:28px;align-items:center;font-size:14px;font-weight:500}
-.nav-links a:hover{color:var(--forest)}
-.nav-cta{padding:10px 22px;background:var(--gold);color:#fff!important;border-radius:100px;font-weight:600;transition:.2s}
-.nav-cta:hover{background:#b07d3e;transform:translateY(-1px)}
+.container{
+max-width:1120px;
+margin:0 auto;
+padding:0 24px;
+}
 
-.hero{padding:160px 0 90px;text-align:center}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(196,148,90,.08);border:1px solid rgba(196,148,90,.2);border-radius:100px;font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:32px}
-.hero h1{font-family:var(--serif);font-size:clamp(40px,7vw,80px);font-weight:500;line-height:1.05;letter-spacing:-.03em;color:var(--forest);margin-bottom:20px;max-width:900px;margin-left:auto;margin-right:auto}
-.hero h1 em{font-style:italic;font-weight:400;color:var(--gold)}
-.hero-tagline{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--gold);margin-bottom:28px}
-.hero-subtitle{font-size:19px;line-height:1.6;color:var(--slate);max-width:620px;margin:0 auto 34px}
-.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-primary,.btn-gold,.btn-outline{display:inline-flex;align-items:center;gap:10px;padding:18px 36px;border-radius:100px;font-size:16px;font-weight:600;transition:.25s}
-.btn-primary{background:var(--forest);color:var(--cream);box-shadow:0 8px 24px rgba(31,61,53,.12)}
-.btn-primary:hover{background:var(--forest-deep);transform:translateY(-2px);box-shadow:0 14px 32px rgba(31,61,53,.2)}
-.btn-gold{background:var(--gold);color:#fff;box-shadow:0 8px 24px rgba(196,148,90,.2)}
-.btn-gold:hover{background:#b07d3e;transform:translateY(-2px)}
-.btn-outline{border:1px solid rgba(31,61,53,.15);background:rgba(255,255,255,.45);color:var(--forest)}
-.btn-outline:hover{background:#fff;transform:translateY(-2px)}
-.hero-micro{margin-top:16px;font-size:13px;color:var(--slate);font-style:italic}
-.hero-meta{margin-top:24px;font-size:14px;color:var(--slate)}
+nav{
+position:fixed;
+inset:0 0 auto 0;
+z-index:1000;
+background:rgba(245,240,232,.92);
+border-bottom:1px solid rgba(0,0,0,.05);
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+}
+.nav-inner{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:14px 0;
+gap:16px;
+}
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-family:var(--serif);
+font-size:22px;
+font-weight:600;
+color:var(--forest);
+letter-spacing:-.02em;
+}
+.logo-mark{
+width:30px;height:30px;border-radius:50%;
+display:grid;place-items:center;
+background:var(--forest);
+color:var(--cream);
+font-family:var(--serif);
+font-style:italic;
+font-weight:600;
+}
+.nav-cta{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:10px 16px;
+border-radius:999px;
+background:var(--gold);
+color:#fff;
+font-weight:700;
+box-shadow:0 10px 24px rgba(196,148,90,.18);
+transition:.2s ease;
+}
+.nav-cta:hover{transform:translateY(-1px);filter:brightness(.98)}
 
-.section{padding:100px 0}
-.section-light{background:var(--cream)}
-.section-warm{background:var(--cream-warm)}
-.section-dark{background:var(--forest);color:var(--cream)}
-.section-header{text-align:center;max-width:760px;margin:0 auto 60px}
-.section-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:16px}
-.section-title{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
-.section-dark .section-title{color:var(--cream)}
-.section-title em{font-style:italic;color:var(--gold)}
-.section-lead{font-size:17px;line-height:1.6;color:var(--slate)}
-.section-dark .section-lead{color:rgba(245,240,232,.8)}
+.hero{
+padding:154px 0 88px;
+text-align:center;
+}
+.badge{
+display:inline-flex;
+align-items:center;
+padding:7px 14px;
+border-radius:999px;
+background:rgba(196,148,90,.12);
+color:var(--gold);
+font-size:12px;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+margin-bottom:22px;
+}
+.hero h1{
+font-family:var(--serif);
+font-size:clamp(42px,6vw,78px);
+line-height:1.03;
+letter-spacing:-.04em;
+color:var(--forest);
+font-weight:500;
+max-width:980px;
+margin:0 auto 18px;
+}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{
+font-size:19px;
+line-height:1.65;
+color:var(--slate);
+max-width:760px;
+margin:0 auto;
+}
+.cta{
+margin-top:28px;
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+}
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:15px 22px;
+border-radius:999px;
+font-weight:700;
+transition:.2s ease;
+}
+.btn-primary{background:var(--forest);color:#fff;box-shadow:0 10px 24px rgba(31,61,53,.12)}
+.btn-secondary{background:var(--gold);color:#fff;box-shadow:0 10px 24px rgba(196,148,90,.16)}
+.btn-primary:hover,.btn-secondary:hover{transform:translateY(-1px);filter:brightness(.98)}
+.hero-meta{
+margin-top:16px;
+color:var(--slate);
+font-size:13px;
+}
 
-.chat-wrapper{max-width:560px;margin:0 auto;background:#ece5dd;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.15)}
-.chat-header{background:#075e54;color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px}
-.chat-avatar{width:40px;height:40px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-weight:600;color:var(--forest);font-size:18px}
-.chat-header-name{font-weight:600}
-.chat-header-status{font-size:12px;opacity:.8}
-.chat-messages{height:440px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:8px;background:#ece5dd;-webkit-overflow-scrolling:touch}
-.chat-bubble{max-width:80%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.4;word-wrap:break-word;display:inline-block;position:relative;color:#1a1a1a;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08);animation:bubbleAppear .35s ease forwards}
-.chat-bubble-user{align-self:flex-end;background:#dcf8c6;border-bottom-right-radius:4px}
-.chat-bubble-claire{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
-.chat-bubble-time{font-size:10px;color:rgba(0,0,0,.45);margin-top:4px;text-align:right}
-@keyframes bubbleAppear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.chat-suggestions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap}
-.chat-suggestion{padding:8px 16px;background:#fff;border-radius:100px;font-size:12px;font-weight:500;color:var(--forest);cursor:pointer;transition:.2s;border:1px solid rgba(0,0,0,.05)}
-.chat-suggestion:hover{background:var(--forest);color:var(--cream)}
-.chat-input-row{display:flex;gap:10px;padding:14px 16px;background:#fff;border-top:1px solid rgba(0,0,0,.05)}
-.chat-input-row input{flex:1;border:none;background:#f0f0f0;border-radius:100px;padding:12px 18px;font-family:inherit;font-size:14px;outline:none}
-.chat-send{width:42px;height:42px;background:var(--forest);color:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s}
-.chat-send:hover{background:var(--forest-deep)}
-.chat-typing{align-self:flex-start;background:#fff;padding:10px 14px;border-radius:14px;border-bottom-left-radius:4px;display:inline-flex;gap:4px;box-shadow:0 1px 2px rgba(0,0,0,.08);animation:bubbleAppear .2s ease forwards}
-.chat-typing span{width:6px;height:6px;background:#999;border-radius:50%;animation:typingBounce 1.4s ease-in-out infinite}
+.section-title{
+font-family:var(--serif);
+font-size:clamp(30px,4.4vw,54px);
+line-height:1.08;
+letter-spacing:-.03em;
+color:var(--forest);
+text-align:center;
+margin-bottom:12px;
+}
+.section-lead{
+max-width:760px;
+margin:0 auto 40px;
+color:var(--slate);
+text-align:center;
+font-size:17px;
+line-height:1.65;
+}
+
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+.card{
+background:#fff;
+border-radius:18px;
+padding:26px;
+border:1px solid rgba(31,61,53,.08);
+box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+.card h3{
+font-family:var(--serif);
+font-size:22px;
+color:var(--forest);
+margin-bottom:10px;
+font-weight:600;
+}
+.card p{
+color:var(--slate);
+font-size:15px;
+line-height:1.65;
+}
+
+.roi{
+font-family:var(--serif);
+font-size:42px;
+line-height:1;
+color:var(--forest);
+margin-bottom:10px;
+font-weight:600;
+}
+.roi-note{
+color:var(--slate);
+font-size:14px;
+line-height:1.55;
+}
+.featured{
+background:var(--forest);
+color:var(--cream);
+border-color:var(--forest);
+}
+.featured h3,.featured p,.featured .price,.featured .pill{color:var(--cream)}
+.featured .roi{color:var(--gold)}
+
+.pill{
+display:inline-flex;
+align-items:center;
+padding:5px 10px;
+border-radius:999px;
+background:rgba(196,148,90,.12);
+color:var(--gold);
+font-size:11px;
+font-weight:700;
+letter-spacing:.1em;
+text-transform:uppercase;
+margin-bottom:12px;
+}
+
+.price{
+font-family:var(--serif);
+font-size:46px;
+line-height:1;
+color:var(--gold);
+margin:14px 0 10px;
+font-weight:600;
+}
+.price small{
+font-family:var(--sans);
+font-size:15px;
+font-weight:500;
+opacity:.8;
+}
+
+.list{
+list-style:none;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-top:20px;
+}
+.list li{
+font-size:14px;
+display:flex;
+gap:8px;
+align-items:flex-start;
+}
+.list li::before{
+content:"✓";
+color:var(--gold);
+font-weight:800;
+flex:0 0 auto;
+margin-top:1px;
+}
+.featured .list li::before{color:var(--cream)}
+
+.card-cta{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:100%;
+margin-top:24px;
+padding:14px 16px;
+border-radius:999px;
+background:var(--forest);
+color:#fff;
+font-weight:700;
+}
+.featured .card-cta{background:var(--gold)}
+.card-cta:hover{filter:brightness(.98)}
+
+.story{
+display:grid;
+grid-template-columns:.85fr 1.15fr;
+gap:36px;
+align-items:center;
+}
+.story-photo{
+aspect-ratio:4/5;
+background:linear-gradient(160deg,var(--forest),var(--forest-deep));
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:var(--cream);
+box-shadow:0 20px 50px rgba(0,0,0,.08);
+}
+.story-mark{
+font-family:var(--serif);
+font-style:italic;
+color:var(--gold);
+font-size:84px;
+line-height:1;
+}
+.story-name{margin-top:8px;font-size:18px;font-weight:600}
+.story-meta{
+margin-top:4px;
+font-size:12px;
+letter-spacing:.12em;
+text-transform:uppercase;
+opacity:.72;
+}
+.story-quote{
+margin:20px 0 22px;
+padding-left:20px;
+border-left:3px solid var(--gold);
+font-family:var(--serif);
+font-style:italic;
+font-size:22px;
+line-height:1.5;
+color:var(--forest);
+}
+.story-text p{
+color:var(--slate);
+font-size:16px;
+line-height:1.75;
+}
+
+.trust-note{
+margin:16px auto 0;
+max-width:820px;
+text-align:center;
+font-size:14px;
+color:var(--slate);
+line-height:1.7;
+padding:14px 18px;
+background:rgba(31,61,53,.04);
+border:1px solid rgba(31,61,53,.08);
+border-radius:14px;
+}
+
+.chat-shell{
+max-width:640px;
+margin:0 auto;
+border-radius:22px;
+overflow:hidden;
+background:#ece5dd;
+box-shadow:0 24px 60px rgba(0,0,0,.12);
+}
+.chat-top{
+background:#075e54;
+color:#fff;
+padding:16px 18px;
+display:flex;
+gap:12px;
+align-items:center;
+}
+.chat-avatar{
+width:42px;height:42px;border-radius:50%;
+background:var(--cream);
+color:var(--forest);
+display:grid;place-items:center;
+font-family:var(--serif);
+font-style:italic;
+font-size:18px;
+font-weight:700;
+}
+.chat-title{font-weight:700}
+.chat-status{font-size:12px;opacity:.8}
+.chat-messages{
+height:430px;
+overflow:auto;
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+.chat-bubble{
+max-width:82%;
+padding:10px 14px;
+border-radius:14px;
+font-size:14px;
+line-height:1.45;
+background:#fff;
+box-shadow:0 1px 2px rgba(0,0,0,.08);
+word-break:break-word;
+}
+.chat-user{align-self:flex-end;background:#dcf8c6;border-bottom-right-radius:4px}
+.chat-claire{align-self:flex-start;border-bottom-left-radius:4px}
+.chat-typing{
+align-self:flex-start;
+background:#fff;
+border-bottom-left-radius:4px;
+padding:10px 14px;
+display:inline-flex;
+gap:4px;
+box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+.chat-typing span{
+width:6px;height:6px;border-radius:50%;
+background:#999;
+animation:bounce 1.2s infinite;
+}
 .chat-typing span:nth-child(2){animation-delay:.2s}
 .chat-typing span:nth-child(3){animation-delay:.4s}
-@keyframes typingBounce{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@keyframes bounce{
+0%,80%,100%{opacity:.3;transform:translateY(0)}
+40%{opacity:1;transform:translateY(-3px)}
+}
+.chat-suggestions{
+padding:12px 16px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+.chat-suggestion{
+border:none;
+padding:8px 14px;
+border-radius:999px;
+background:#fff;
+border:1px solid rgba(0,0,0,.06);
+font-size:12px;
+font-weight:600;
+color:var(--forest);
+}
+.chat-suggestion:hover{background:var(--forest);color:var(--cream)}
+.chat-input{
+display:flex;
+gap:10px;
+padding:14px 16px;
+background:#fff;
+border-top:1px solid rgba(0,0,0,.05);
+}
+.chat-input input{
+flex:1;
+border:none;
+outline:none;
+background:#f2f2f2;
+border-radius:999px;
+padding:12px 18px;
+font-size:14px;
+}
+.chat-send{
+width:44px;
+height:44px;
+border-radius:50%;
+background:var(--forest);
+color:var(--cream);
+display:grid;
+place-items:center;
+flex:0 0 auto;
+}
+.chat-send:hover{background:var(--forest-deep)}
 
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:40px auto 0}
-@media (max-width:768px){
-.grid-3,.grid-2{grid-template-columns:1fr}
-.nav-links a:not(.nav-cta){display:none}
-.container,.nav-inner{padding:0 20px}
-.hero{padding:120px 0 60px}
-.hero-tagline{font-size:18px}
-.section{padding:60px 0}
-.section-header{margin-bottom:40px}
+.faq{
+max-width:760px;
+margin:0 auto;
+}
+.faq-item{
+background:#fff;
+border-radius:16px;
+border:1px solid rgba(31,61,53,.08);
+padding:18px;
+margin-bottom:12px;
+box-shadow:0 10px 28px rgba(0,0,0,.04);
+}
+.faq-question{
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
+border:none;
+background:none;
+text-align:left;
+font-family:var(--serif);
+font-size:18px;
+color:var(--forest);
+font-weight:600;
+}
+.faq-icon{
+width:28px;height:28px;border-radius:50%;
+background:var(--forest);
+color:var(--cream);
+display:grid;place-items:center;
+flex:0 0 auto;
+transition:transform .2s ease;
+}
+.faq-item.active .faq-icon{transform:rotate(45deg)}
+.faq-answer{
+max-height:0;
+overflow:hidden;
+transition:max-height .28s ease,padding-top .28s ease;
+color:var(--slate);
+font-size:15px;
+line-height:1.7;
+}
+.faq-item.active .faq-answer{
+max-height:280px;
+padding-top:12px;
 }
 
-.obs-card,.trust-card{padding:32px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.08);text-align:center}
-.obs-icon,.trust-icon{width:40px;height:40px;background:var(--forest);color:var(--cream);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:18px}
-.obs-card h3,.trust-card h3{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--forest);margin-bottom:8px}
-.obs-card p,.trust-card p{font-size:14px;color:var(--slate)}
-.value-card{padding:40px;background:var(--cream-warm);border-radius:16px;text-align:center;max-width:780px;margin:0 auto}
-.value-card p{font-size:18px;line-height:1.7;color:var(--slate)}
-.roi-card{padding:32px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.08)}
-.roi-card-loss .roi-number{color:#c8553d}
-.roi-card-gain{background:var(--forest);color:var(--cream);border:none}
-.roi-card-gain .roi-number{color:var(--gold)}
-.roi-label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:12px;opacity:.7}
-.roi-number{font-family:var(--serif);font-size:48px;font-weight:600;letter-spacing:-.02em;line-height:1;margin-bottom:12px}
-.roi-detail{font-size:14px;opacity:.8}
-.roi-footnote{text-align:center;margin-top:24px;font-size:12px;color:var(--slate);opacity:.7;font-style:italic}
-
-.price-card{padding:42px 36px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.1);text-align:center}
-.price-card.featured{background:var(--forest);color:var(--cream);border-color:var(--forest)}
-.price-tag{font-family:var(--serif);font-style:italic;opacity:.7;margin-bottom:8px}
-.price-amount{font-family:var(--serif);font-size:56px;font-weight:600;line-height:1;margin:16px 0 8px}
-.price-period{font-size:16px;opacity:.7}
-.price-features{list-style:none;margin:28px 0;display:flex;flex-direction:column;gap:12px;text-align:left}
-.price-features li{display:flex;align-items:center;gap:10px;font-size:14px}
-.price-cta{display:block;width:100%;padding:14px;border-radius:100px;font-weight:700;font-size:14px;text-align:center;transition:.2s;margin-top:20px}
-.price-card:not(.featured) .price-cta{background:var(--forest);color:var(--cream)}
-.price-card.featured .price-cta{background:var(--gold);color:#fff}
-.price-card.featured .price-cta:hover{background:#b07d3e}
-
-.story-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
-.story-photo{aspect-ratio:4/5;background:var(--forest);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--cream);font-family:var(--serif);text-align:center}
-.story-monogram{font-size:80px;font-style:italic;color:var(--gold);line-height:1}
-.story-quote{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--forest);padding-left:24px;border-left:3px solid var(--gold);margin:28px 0;line-height:1.5}
-@media (max-width:768px){
-.story-grid{grid-template-columns:1fr}
-.story-photo{max-width:280px;margin:0 auto}
+.calendly-inline-widget{
+min-width:320px;
+height:700px;
+border-radius:18px;
+overflow:hidden;
+background:#fff;
+}
+.fallback{
+display:none;
+text-align:center;
+color:var(--slate);
+margin-top:12px;
+font-size:14px;
 }
 
-.faq-list{max-width:720px;margin:0 auto}
-.faq-item{border-bottom:1px solid rgba(31,61,53,.1);padding:20px 0}
-.faq-question{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;font-family:var(--serif);font-size:18px;font-weight:500;color:var(--forest);padding:8px 0;background:transparent}
-.faq-question:hover{color:var(--gold)}
-.faq-icon{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .3s}
-.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;font-size:15px;color:var(--slate);line-height:1.6}
-.faq-answer-inner{padding:0 0 20px}
-.faq-item.active .faq-answer{max-height:600px}
-.faq-item.active .faq-icon{transform:rotate(45deg);background:var(--gold)}
-
-.calendly-inline-widget{min-width:320px;height:700px;border-radius:16px;overflow:hidden}
-
-.final-cta{text-align:center;padding:120px 0;background:var(--forest-deep);color:var(--cream)}
-.final-cta h2{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:500;margin-bottom:20px}
+.final-cta{
+padding:96px 0;
+background:var(--forest-deep);
+color:var(--cream);
+text-align:center;
+}
+.final-cta h2{
+font-family:var(--serif);
+font-size:clamp(32px,5vw,58px);
+line-height:1.08;
+font-weight:500;
+margin-bottom:18px;
+}
 .final-cta h2 em{font-style:italic;color:var(--gold)}
-.final-cta .btn-primary{background:var(--gold)}
-.final-cta .btn-primary:hover{background:#b07d3e}
-footer{padding:40px 0;background:var(--forest-deep);color:rgba(245,240,232,.6);font-size:13px;text-align:center;border-top:1px solid rgba(255,255,255,.05)}
-footer a{color:var(--gold)}
-@media (max-width:560px){
-.chat-wrapper{width:100%;margin:0 10px}
+.final-cta p{
+font-size:18px;
+opacity:.85;
+margin-bottom:28px;
+}
+
+footer{
+padding:34px 0;
+text-align:center;
+color:var(--slate);
+font-size:13px;
+}
+
+@media (max-width: 920px){
+.grid-3,.grid-2,.story{grid-template-columns:1fr}
+.hero{padding-top:132px}
+.section{padding:66px 0}
+}
+@media (max-width: 560px){
+.container{padding:0 18px}
+.hero h1{font-size:40px}
+.hero p{font-size:17px}
+.section-title{font-size:28px}
 .chat-messages{height:360px}
-.chat-bubble{max-width:90%;padding:8px 12px;font-size:13px}
+.chat-bubble{max-width:90%}
+.price{font-size:40px}
 }
 </style>
 </head>
+
 <body>
 <nav>
-<div class="nav-inner">
-<a href="#" class="logo"><span class="logo-mark">C</span>Claire</a>
-<div class="nav-links">
-<a href="#demo">Démo</a>
-<a href="#tarifs">Tarifs</a>
-<a href="#a-propos">À propos</a>
-<a href="#booking" class="nav-cta">Réserver une démo</a>
-</div>
+<div class="container nav-inner">
+<a class="logo" href="#">
+<span class="logo-mark">C</span>
+<span>Claire</span>
+</a>
+<a class="nav-cta" href="#booking">Réserver</a>
 </div>
 </nav>
 
 <section class="hero">
 <div class="container">
-<div class="hero-eyebrow">⊛ Phase de lancement · Lyon · 5 cabinets partenaires</div>
+<div class="badge">Phase de lancement · 5 cabinets à Lyon</div>
 <h1>Chaque patient mérite une réponse <em>immédiate.</em></h1>
-<p class="hero-tagline">L’accueil patient nouvelle génération.</p>
-<p class="hero-subtitle">Claire répond aux demandes simples de vos patients 24h/24, filtre les questions répétitives et transmet les cas importants à votre équipe.</p>
-<div class="hero-ctas">
-<a href="#demo" class="btn-primary">Tester la démonstration</a>
-<a href="#booking" class="btn-gold">Réserver une démo</a>
+<p>Claire répond aux demandes patients 24/7, qualifie les urgences et réduit les appels manqués sans changer votre organisation.</p>
+<div class="cta">
+<a class="btn btn-primary" href="#demo">Voir la démo</a>
+<a class="btn btn-secondary" href="#booking">Réserver une démo</a>
 </div>
-<p class="hero-micro">Démonstration immédiate. Aucune installation.</p>
-<div class="hero-meta">14 jours gratuits · Sans engagement · Installation incluse</div>
+<div class="hero-meta">Installation en 10 minutes · Sans changement de logiciel · Arrêt à tout moment</div>
 </div>
 </section>
 
-<section class="section section-dark" id="demo">
+<section class="section">
 <div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Faites l’expérience</div>
-<h2 class="section-title">Posez une question. <em>Regardez.</em></h2>
-<p class="section-lead">Simulation basée sur des demandes fréquentes en cabinet dentaire.</p>
+<h2 class="section-title">Ce que coûte un appel manqué</h2>
+<p class="section-lead">Quand un patient ne reçoit pas de réponse rapide, il rappelle souvent ailleurs. Claire réduit cette fuite sans alourdir votre équipe.</p>
+
+<div class="grid-3">
+<div class="card">
+<div class="roi">80€–300€</div>
+<div class="roi-note">Valeur moyenne d’un patient non recontacté</div>
 </div>
-<div class="chat-wrapper">
-<div class="chat-header">
+
+<div class="card">
+<div class="roi">1 800€–3 200€</div>
+<div class="roi-note">Perte mensuelle estimée sans réponse rapide</div>
+</div>
+
+<div class="card featured">
+<div class="pill">Offre fondateur</div>
+<div class="roi">99€</div>
+<div class="roi-note">/ mois, installation incluse</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="demo">
+<div class="container">
+<h2 class="section-title">Démo interactive</h2>
+<p class="section-lead">Testez une conversation simple, inspirée des demandes les plus fréquentes d’un cabinet dentaire.</p>
+
+<div class="chat-shell">
+<div class="chat-top">
 <div class="chat-avatar">C</div>
 <div>
-<div class="chat-header-name">Claire · Cabinet dentaire</div>
-<div class="chat-header-status">en ligne · répond en quelques secondes</div>
+<div class="chat-title">Claire · Assistante du cabinet</div>
+<div class="chat-status">en ligne · répond en quelques secondes</div>
 </div>
 </div>
+
 <div class="chat-messages" id="chatMessages">
-<div class="chat-bubble chat-bubble-claire">Bonjour, je suis Claire, l’assistante du cabinet. Comment puis-je vous aider aujourd’hui ?<div class="chat-bubble-time">maintenant</div></div>
+<div class="chat-bubble chat-claire">Bonjour, je suis Claire. Comment puis-je vous aider aujourd’hui ?</div>
 </div>
+
 <div class="chat-suggestions" id="chatSuggestions">
-<button class="chat-suggestion" type="button" onclick="sendMessage('J\\'ai mal à une dent depuis hier')">J’ai mal à une dent</button>
-<button class="chat-suggestion" type="button" onclick="sendMessage('Quels sont vos horaires ?')">Quels sont vos horaires ?</button>
-<button class="chat-suggestion" type="button" onclick="sendMessage('Je voudrais prendre rendez-vous')">Prendre rendez-vous</button>
+<button class="chat-suggestion" type="button" data-msg="J'ai mal à une dent depuis hier">J’ai mal à une dent</button>
+<button class="chat-suggestion" type="button" data-msg="Quels sont vos horaires ?">Quels sont vos horaires ?</button>
+<button class="chat-suggestion" type="button" data-msg="Je voudrais prendre rendez-vous">Prendre rendez-vous</button>
 </div>
-<div class="chat-input-row">
-<input type="text" id="chatInput" placeholder="Écrivez votre question..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendMessage();}">
-<button class="chat-send" type="button" onclick="sendMessage()">➤</button>
-</div>
-</div>
-<p class="hero-micro" style="text-align:center;margin-top:16px;">Simulation inspirée d’échanges réels en cabinet dentaire.</p>
-</div>
-</section>
 
-<section class="section section-light">
-<div class="container">
-<div class="section-header">
-<h2 class="section-title">Un appel manqué est souvent <em>un patient perdu.</em></h2>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Écrivez votre question..." autocomplete="off" maxlength="220">
+<button class="chat-send" type="button" id="chatSendBtn">➤</button>
 </div>
-<div class="value-card">
-<p>Entre les soins, les urgences et les périodes de forte activité, répondre immédiatement devient difficile.<br><br>Claire assure une continuité d’accueil, sans interruption, jour et nuit.</p>
 </div>
 </div>
 </section>
 
-<section class="section section-warm">
+<section class="section">
 <div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Un impact mesurable</div>
-<h2 class="section-title">Chaque appel manqué <em>a un coût réel.</em></h2>
-</div>
-<div class="grid-3">
-<div class="roi-card roi-card-loss">
-<div class="roi-label">Vous perdez aujourd’hui</div>
-<div class="roi-number">80 – 300€</div>
-<div class="roi-detail">par patient sans réponse, parti chez la concurrence.</div>
-</div>
-<div class="roi-card roi-card-loss">
-<div class="roi-label">Sur un mois</div>
-<div class="roi-number">1 800 – 3 200€</div>
-<div class="roi-detail">si 3 appels par jour restent sans réponse.</div>
-</div>
-<div class="roi-card roi-card-gain">
-<div class="roi-label">Avec Claire</div>
-<div class="roi-number">99€/mois</div>
-<div class="roi-detail">Rentable dès le 2e patient récupéré dans le mois.</div>
-</div>
-</div>
-<p class="roi-footnote">Estimations indicatives basées sur la valeur moyenne d’un soin et des conversations type en cabinet dentaire.</p>
-</div>
-</section>
+<h2 class="section-title">Offre fondateur</h2>
+<p class="section-lead">Un pilote simple, sans engagement, pour valider le gain réel dans votre cabinet.</p>
 
-<section class="section section-light" id="tarifs">
-<div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Deux offres, en toute transparence</div>
-<h2 class="section-title">Un tarif. <em>Clair.</em></h2>
-</div>
 <div class="grid-2">
-<div class="price-card featured">
-<div class="price-tag">Offre fondateur · 5 cabinets partenaires</div>
-<h3 style="font-family:var(--serif);font-size:22px;margin-bottom:8px;">Cabinet fondateur</h3>
-<div class="price-amount">99€ <span class="price-period">/mois · à vie</span></div>
-<ul class="price-features">
-<li>✓ Appels et messages illimités</li>
-<li>✓ Tarif gelé à vie</li>
-<li>✓ Installation à distance incluse</li>
-<li>✓ Support direct</li>
-<li>✓ Sans engagement</li>
+<div class="card featured">
+<div class="pill">5 cabinets partenaires</div>
+<h3>Cabinet fondateur</h3>
+<div class="price">99€ <small>/ mois à vie</small></div>
+<ul class="list">
+<li>Test 7 jours.</li>
+<li>Installation incluse.</li>
+<li>Sans engagement.</li>
+<li>Appels et messages illimités.</li>
+<li>Tarif fondateur garanti.</li>
 </ul>
-<a href="#booking" class="price-cta">Réserver ma place fondateur</a>
+<a class="card-cta" href="#booking">Réserver ma place</a>
 </div>
-<div class="price-card">
-<div class="price-tag">Pour les cabinets suivants</div>
-<h3 style="font-family:var(--serif);font-size:22px;margin-bottom:8px;">Cabinet standard</h3>
-<div class="price-amount">200€ <span class="price-period">/mois</span></div>
-<ul class="price-features">
-<li>✓ Appels et messages illimités</li>
-<li>✓ Installation à distance incluse</li>
-<li>✓ Support par email sous 24h</li>
-<li>✓ Sans engagement</li>
+
+<div class="card">
+<div class="pill">Après lancement</div>
+<h3>Cabinet standard</h3>
+<div class="price">200€ <small>/ mois</small></div>
+<ul class="list">
+<li>Fonction complète.</li>
+<li>Support inclus.</li>
+<li>Installation incluse.</li>
+<li>Sans engagement.</li>
 </ul>
-<a href="#booking" class="price-cta">Réserver une démo</a>
+<a class="card-cta" href="#booking">Réserver une démo</a>
 </div>
 </div>
 </div>
 </section>
 
-<section class="section section-warm" id="a-propos">
+<section class="section">
 <div class="container">
-<div class="story-grid">
+<div class="story">
 <div class="story-photo">
 <div>
-<div class="story-monogram">T.</div>
-<div style="font-size:18px;margin-top:8px;">Tafsir</div>
-<div style="opacity:.6;font-size:12px;text-transform:uppercase;letter-spacing:.1em;">24 ans · Lyon</div>
+<div class="story-mark">T.</div>
+<div class="story-name">Tafsir</div>
+<div class="story-meta">24 ans · Lyon</div>
 </div>
 </div>
-<div>
-<div class="section-eyebrow">À propos</div>
-<h2 class="section-title" style="text-align:left;">Une seule personne derrière Claire. <em>Moi.</em></h2>
-<p style="font-size:16px;line-height:1.7;color:var(--slate);margin-top:20px;">J’ai conçu Claire pour résoudre un problème simple : les cabinets dentaires reçoivent beaucoup de demandes répétitives alors que les équipes manquent déjà de temps.</p>
-<blockquote class="story-quote">"Je cherche 5 cabinets fondateurs à Lyon. 99€/mois à vie au lieu de 200€. En échange, vous me donnez votre feedback honnête."</blockquote>
-<p style="font-size:15px;color:var(--slate);">Pas d’agence, pas de pitch agressif. Une démo de 10 minutes, et vous décidez.</p>
+<div class="story-text">
+<h2 class="section-title" style="text-align:left;margin-bottom:16px;">Pourquoi j’ai créé <em>Claire</em></h2>
+<p>J’ai construit Claire pour une raison simple : trop de cabinets perdent des patients parce qu’un appel reste sans réponse ou qu’une demande simple arrive au mauvais moment.</p>
+<blockquote class="story-quote">Je cherche 5 cabinets fondateurs à Lyon. L’objectif est simple : tester Claire en conditions réelles, obtenir un retour honnête, et valider ensemble la valeur apportée.</blockquote>
+<p>Pas d’agence, pas de jargon, pas de complexité inutile. Juste une solution claire, rapide à comprendre et assez solide pour être testée aujourd’hui.</p>
 </div>
 </div>
 </div>
 </section>
 
-<section class="section section-light">
+<section class="section">
 <div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Trois engagements fermes</div>
-<h2 class="section-title">Vos garanties. <em>Par écrit.</em></h2>
-</div>
+<h2 class="section-title">Les garanties qui rassurent</h2>
+<p class="section-lead">La simplicité compte, mais la confiance compte encore plus dans un contexte santé.</p>
 <div class="grid-3">
-<div class="trust-card">
-<div class="trust-icon">✓</div>
-<h3>14 jours sans risque</h3>
-<p>Test en conditions réelles, sans CB. Pas convaincu ? Vous arrêtez.</p>
+<div class="card">
+<h3>Essai encadré</h3>
+<p>Vous testez Claire sur une courte période avant de décider.</p>
 </div>
-<div class="trust-card">
-<div class="trust-icon">✓</div>
-<h3>Joignable directement</h3>
-<p>Vous avez mon numéro personnel. Un problème ? Je réponds personnellement.</p>
+<div class="card">
+<h3>Arrêt simple</h3>
+<p>Vous pouvez arrêter sans complication si ce n’est pas utile.</p>
 </div>
-<div class="trust-card">
-<div class="trust-icon">✓</div>
-<h3>Conforme RGPD</h3>
-<p>Aucune donnée médicale sensible n’est conservée côté Claire.</p>
+<div class="card">
+<h3>Données limitées</h3>
+<p>Aucune donnée patient n’est stockée ; les informations sont uniquement transmises au cabinet.</p>
+</div>
+</div>
+<div class="trust-note">
+Claire est pensée pour rester simple : peu de données, transmission directe au cabinet, et une mise en place qui ne demande pas de changer vos outils.
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">FAQ</h2>
+<div class="faq">
+<div class="faq-item">
+<button class="faq-question" type="button" aria-expanded="false">
+Claire remplace une secrétaire ?
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">Non. Claire automatise les demandes simples et laisse l’équipe gérer ce qui demande une intervention humaine.</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question" type="button" aria-expanded="false">
+Compatible Doctolib ?
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">Oui. Claire s’ajoute à votre organisation sans bouleverser vos outils actuels.</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question" type="button" aria-expanded="false">
+Puis-je arrêter quand je veux ?
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">Oui. Il n’y a pas d’engagement long terme, et l’arrêt reste simple.</div>
 </div>
 </div>
 </div>
 </section>
 
-<section class="section section-warm">
+<section class="section" id="booking">
 <div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Questions fréquentes</div>
-<h2 class="section-title">Tout ce que vous voulez <em>savoir.</em></h2>
-</div>
-<div class="faq-list">
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Mes patients vont-ils savoir que c’est une IA ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Claire se présente comme l’assistante automatisée du cabinet. Elle ne remplace pas l’équipe, elle répond aux demandes simples et transmet le reste.</div></div>
-</div>
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Et si Claire répond mal à un patient ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Claire ne répond qu’aux questions qu’elle maîtrise. Pour le reste, elle transmet au cabinet avec une formulation simple et prudente.</div></div>
-</div>
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Et si Claire ne comprend pas une demande ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Elle le dit clairement. Claire sait transmettre au cabinet dès qu’une demande sort de son périmètre.</div></div>
-</div>
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Compatible avec Doctolib ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Oui. Claire complète votre fonctionnement actuel, sans perturber vos habitudes de travail.</div></div>
-</div>
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Pourquoi 99€ à vie ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Je cherche mes 5 premiers cabinets partenaires à Lyon. En échange du tarif réduit à vie, vous m’aidez à améliorer Claire avec vos retours.</div></div>
-</div>
-<div class="faq-item">
-<button class="faq-question" type="button" aria-expanded="false">Et si je ne suis pas satisfait ?<span class="faq-icon">+</span></button>
-<div class="faq-answer"><div class="faq-answer-inner">Vous arrêtez. Aucune pénalité, aucun engagement, et je supprime les données si besoin.</div></div>
-</div>
-</div>
-</div>
-</section>
+<h2 class="section-title">Réserver une démo</h2>
+<p class="section-lead">Dix minutes suffisent pour voir si Claire est adaptée à votre cabinet.</p>
 
-<section class="section section-light" id="booking">
-<div class="container">
-<div class="section-header">
-<div class="section-eyebrow">Réserver une démo</div>
-<h2 class="section-title">Voyons ensemble si <em>Claire</em> convient à votre cabinet.</h2>
-<p class="section-lead">10 minutes. Sans engagement. En visio ou autour d’un café si vous êtes à Lyon.</p>
-</div>
-<div class="calendly-inline-widget" data-url="https://calendly.com/contact-claireassistante/demo-claire-10-minutes"></div>
+<div id="calendlyEmbed" class="calendly-inline-widget"></div>
+<div id="calendlyFallback" class="fallback">Réservation indisponible — contactez-moi au 06 05 80 05 94.</div>
 </div>
 </section>
 
 <section class="final-cta">
 <div class="container">
-<h2>Discutons. 10 minutes, <em>sans engagement.</em></h2>
-<p style="font-size:18px;opacity:.8;margin-bottom:36px;">Vous me parlez de votre cabinet, je vous montre Claire.</p>
-<a href="#booking" class="btn-primary">Réserver ma démo gratuite</a>
-<p style="margin-top:32px;font-size:15px;opacity:.7;">contact@claireassistante.fr · 06 05 80 05 94</p>
+<h2>Simple à comprendre. <em>Prête à tester.</em></h2>
+<p>Réservez une démo et voyons si Claire mérite une place dans votre cabinet.</p>
+<a class="btn btn-secondary" href="#booking">Réserver ma démo gratuite</a>
 </div>
 </section>
 
 <footer>
 <div class="container">
-<p>© 2025 Claire — Conçu à Lyon par Tafsir · <a href="#">Mentions légales</a> · <a href="#">Confidentialité</a> · <a href="#">RGPD</a></p>
+<p>© Claire — Lyon · contact@claireassistante.fr · 06 05 80 05 94</p>
 </div>
 </footer>
 
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-const messages=document.getElementById('chatMessages');
-const input=document.getElementById('chatInput');
-const suggestions=document.getElementById('chatSuggestions');
-let currentState='idle';
+document.addEventListener('DOMContentLoaded', function () {
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSendBtn = document.getElementById('chatSendBtn');
+const chatSuggestions = document.getElementById('chatSuggestions');
 
-function addBubble(text,type){
-const bubble=document.createElement('div');
-bubble.className='chat-bubble chat-bubble-'+type;
-const time=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-bubble.innerHTML='<div>'+text+'</div><div class="chat-bubble-time">'+time+'</div>';
-messages.appendChild(bubble);
-messages.scrollTop=messages.scrollHeight;
-}
+let typingNode = null;
+let replyTimer = null;
 
-function showTyping(){
-const typing=document.createElement('div');
-typing.className='chat-typing';
-typing.id='typingIndicator';
-typing.innerHTML='<span></span><span></span><span></span>';
-messages.appendChild(typing);
-messages.scrollTop=messages.scrollHeight;
+function scrollBottom() {
+requestAnimationFrame(function () {
+chatMessages.scrollTop = chatMessages.scrollHeight;
+});
 }
 
-function hideTyping(){
-const typing=document.getElementById('typingIndicator');
-if(typing) typing.remove();
+function addBubble(text, type) {
+const bubble = document.createElement('div');
+bubble.className = 'chat-bubble chat-' + type;
+bubble.textContent = text;
+chatMessages.appendChild(bubble);
+scrollBottom();
 }
 
-function reply(message){
-const msg=message.toLowerCase();
-if(/(mal|douleur|rage de dent|sensibilité)/.test(msg)){
-currentState='pain';
-return 'Je suis désolée que vous ayez mal. Depuis quand cette douleur est-elle présente ?';
-}
-if(/(urgence|gonflement|saignement|dent cassée|accident)/.test(msg)){
-currentState='urgent';
-return 'Je comprends. Pouvez-vous me décrire précisément ce qu’il se passe ?';
-}
-if(/(rendez-vous|rdv|réserver|consultation)/.test(msg)){
-currentState='appointment';
-return 'Bien sûr. Pour quel motif souhaitez-vous venir au cabinet ?';
-}
-if(/(horaire|ouvert|fermé|samedi)/.test(msg)){
-return 'Le cabinet est ouvert du lundi au vendredi de 9h à 19h et le samedi matin de 9h à 12h. Souhaitez-vous prendre rendez-vous ?';
-}
-if(/(prix|tarif|coût|devis|couronne)/.test(msg)){
-return 'Les tarifs varient selon le soin. Une consultation est à 30€, un détartrage entre 60 et 90€. Pour un devis précis, le mieux est de prendre rendez-vous.';
-}
-if(/(adresse|où|trouve)/.test(msg)){
-return 'Le cabinet est situé au 12 avenue Jean Jaurès, 69200 Vénissieux. Voulez-vous un itinéraire ?';
-}
-if(/(bonjour|bonsoir)/.test(msg)){
-return 'Bonjour ! Que puis-je faire pour vous aujourd’hui ?';
-}
-if(/(merci)/.test(msg)){
-return 'Avec plaisir. N’hésitez pas si vous avez besoin d’aide.';
-}
-return 'Je préfère transmettre votre demande au cabinet afin qu’un membre de l’équipe puisse vous répondre correctement. Pouvez-vous me laisser votre numéro de téléphone ?';
+function addTyping() {
+removeTyping();
+typingNode = document.createElement('div');
+typingNode.className = 'chat-typing';
+typingNode.innerHTML = '<span></span><span></span><span></span>';
+chatMessages.appendChild(typingNode);
+scrollBottom();
 }
 
-window.sendMessage=function(text){
-const message=(text||input.value.trim()).trim();
-if(!message) return;
-addBubble(message,'user');
-input.value='';
-if(suggestions) suggestions.style.display='none';
-showTyping();
-setTimeout(function(){
-hideTyping();
-addBubble(reply(message),'claire');
-},700);
-};
+function removeTyping() {
+if (typingNode) {
+typingNode.remove();
+typingNode = null;
+}
+}
 
-document.querySelectorAll('.faq-item').forEach(function(item){
-const btn=item.querySelector('.faq-question');
-if(!btn) return;
-btn.addEventListener('click',function(){
-const active=item.classList.contains('active');
-document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('active');});
-document.querySelectorAll('.faq-question').forEach(function(b){b.setAttribute('aria-expanded','false');});
-if(!active){
+function normalizeText(text) {
+return String(text)
+.toLowerCase()
+.normalize('NFD')
+.replace(/[\u0300-\u036f]/g, '')
+.replace(/[-]/g, ' ')
+.replace(/\s+/g, ' ')
+.trim();
+}
+
+function reply(message) {
+const msg = normalizeText(message);
+
+if (/\b(mal|douleur|dent|sensibilite)\b/.test(msg)) return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
+if (/\b(urgence|gonfle|gonflement|saigne|saignement|dent cassee|accident)\b/.test(msg)) return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
+if (/\b(rdv|rendez vous|rendezvous|reservation|reserver|rendez-vous)\b/.test(msg)) return 'Bien sûr. Pour quel motif souhaitez-vous venir ?';
+if (/\b(horaire|ouvert|ouverture|ferme|fermeture)\b/.test(msg)) return 'Le cabinet est ouvert du lundi au vendredi de 9h à 19h.';
+if (/\b(merci|bonjour|bonsoir)\b/.test(msg)) return 'Avec plaisir. Que puis-je faire pour vous aujourd’hui ?';
+
+return 'Je transmets votre demande au cabinet. Souhaitez-vous que je prenne votre numéro ?';
+}
+
+function sendMessage(text) {
+const raw = text || chatInput.value;
+const msg = String(raw).trim().slice(0, 220);
+if (!msg) return;
+
+if (replyTimer) {
+clearTimeout(replyTimer);
+replyTimer = null;
+}
+
+addBubble(msg, 'user');
+chatInput.value = '';
+addTyping();
+
+replyTimer = window.setTimeout(function () {
+removeTyping();
+addBubble(reply(msg), 'claire');
+replyTimer = null;
+}, 650);
+}
+
+chatSendBtn.addEventListener('click', function () {
+sendMessage();
+});
+
+chatInput.addEventListener('keydown', function (e) {
+if (e.key === 'Enter') {
+e.preventDefault();
+sendMessage();
+}
+});
+
+chatSuggestions.addEventListener('click', function (e) {
+const btn = e.target.closest('.chat-suggestion');
+if (!btn) return;
+sendMessage(btn.dataset.msg || '');
+});
+
+document.querySelectorAll('.faq-item').forEach(function (item) {
+const button = item.querySelector('.faq-question');
+if (!button) return;
+
+button.addEventListener('click', function () {
+const isActive = item.classList.contains('active');
+
+document.querySelectorAll('.faq-item').forEach(function (el) {
+el.classList.remove('active');
+});
+document.querySelectorAll('.faq-question').forEach(function (el) {
+el.setAttribute('aria-expanded', 'false');
+});
+
+if (!isActive) {
 item.classList.add('active');
-btn.setAttribute('aria-expanded','true');
+button.setAttribute('aria-expanded', 'true');
 }
 });
 });
+});
+
+window.addEventListener('load', function () {
+const embed = document.getElementById('calendlyEmbed');
+const fallback = document.getElementById('calendlyFallback');
+
+try {
+if (window.Calendly && embed && typeof window.Calendly.initInlineWidget === 'function') {
+window.Calendly.initInlineWidget({
+url: 'https://calendly.com/contact-claireassistante/demo-claire-10-minutes',
+parentElement: embed
+});
+} else {
+fallback.style.display = 'block';
+}
+} catch (e) {
+fallback.style.display = 'block';
+}
 });
 </script>
 </body>
