@@ -3,7 +3,7 @@
 // Prompt système optimisé pour démo professionnelle
 
 export const config = {
-runtime: ‘edge’,
+runtime: 'edge',
 };
 
 // =====================================================
@@ -195,17 +195,16 @@ Tu es Claire. Tu es professionnelle, humaine, brève. Tu accompagnes le patient 
 // =====================================================
 export default async function handler(req) {
 // Seul POST autorisé
-if (req.method !== ‘POST’) {
-return new Response(JSON.stringify({ error: ‘Method not allowed’ }), {
+if (req.method !== 'POST') {
+return new Response(JSON.stringify({ error: 'Method not allowed' }), {
 status: 405,
-headers: { ‘content-type’: ‘application/json’ },
+headers: { 'content-type': 'application/json' },
 });
 }
 
 try {
 const { messages } = await req.json();
 
-```
 // Validation
 if (!Array.isArray(messages) || messages.length === 0) {
 return new Response(
@@ -243,9 +242,9 @@ headers: {
 'anthropic-version': '2023-06-01',
 },
 body: JSON.stringify({
-model: 'claude-haiku-4-5-20251001', // Rapide et économique
-max_tokens: 200, // Force réponses courtes
-temperature: 0.4, // Naturel mais cadré
+model: 'claude-haiku-4-5-20251001',
+max_tokens: 200,
+temperature: 0.4,
 system: SYSTEM_PROMPT,
 messages: recentMessages,
 }),
@@ -272,17 +271,15 @@ return new Response(JSON.stringify({ reply }), {
 status: 200,
 headers: { 'content-type': 'application/json' },
 });
-```
-
 } catch (err) {
-console.error(‘Erreur fonction chat:’, err);
+console.error('Erreur fonction chat:', err);
 return new Response(
 JSON.stringify({
 reply:
-“Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.”,
+"Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.",
 }),
-{ status: 200, headers: { ‘content-type’: ‘application/json’ } }
+{ status: 200, headers: { 'content-type': 'application/json' } }
 );
 }
 }
-         
+
