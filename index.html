@@ -791,6 +791,7 @@ const chatSuggestions = document.getElementById('chatSuggestions');
 let typingNode = null;
 let replyTimer = null;
 let state = 'idle';
+let lastIntent = null;
 
 function scrollBottom() {
 requestAnimationFrame(function () {
@@ -838,66 +839,80 @@ const msg = normalizeText(message);
 if (/\b(mal|douleur|dent|sensibilite)\b/.test(msg)) return 'pain';
 if (/\b(urgence|gonfle|gonflement|saigne|saignement|dent cassee|accident)\b/.test(msg)) return 'urgent';
 if (/\b(rdv|rendez vous|rendezvous|reservation|reserver|rendez-vous)\b/.test(msg)) return 'appointment';
-if (/\b(horaire|ouvert|ouverture|ferme|fermeture)\b/.test(msg)) return 'hours';
+if (/\b(horaire|horaires|ouvert|ouverture|ferme|fermeture)\b/.test(msg)) return 'hours';
 if (/\b(merci|bonjour|bonsoir)\b/.test(msg)) return 'greeting';
 return 'fallback';
 }
 
+function resetOnNewIntent(intent) {
+if (lastIntent && intent !== lastIntent) {
+state = 'idle';
+}
+lastIntent = intent;
+}
+
 function reply(message) {
 const intent = classify(message);
+resetOnNewIntent(intent);
 
-if (state === 'idle') {
 if (intent === 'pain') {
+if (state === 'idle') {
 state = 'pain_followup';
 return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
 }
-if (intent === 'hours') {
-state = 'hours_done';
-return 'Bien sûr. Le cabinet est ouvert du lundi au vendredi de 9h à 19h.';
-}
-if (intent === 'appointment') {
-state = 'appointment_followup';
-return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
-}
-if (intent === 'urgent') {
-state = 'urgent_followup';
-return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
-}
-if (intent === 'greeting') {
-return 'Avec plaisir. Que puis-je faire pour vous aujourd’hui ?';
-}
-return 'Je transmets votre demande au cabinet. Souhaitez-vous que je prenne votre numéro ?';
-}
-
 if (state === 'pain_followup') {
 state = 'pain_detail';
 return 'Merci, je note cela. La douleur est-elle plutôt légère, modérée ou forte ?';
 }
-
 if (state === 'pain_detail') {
 state = 'pain_done';
 return 'Je comprends. Je transmets votre demande au cabinet pour qu’il vous recontacte rapidement.';
 }
-
-if (state === 'hours_done') {
-return 'Si vous souhaitez, je peux aussi vous aider pour un rendez-vous.';
+state = 'idle';
+return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
 }
 
-if (state === 'appointment_followup') {
-state = 'appointment_done';
-return 'Parfait. Je transmets votre demande au cabinet.';
+if (intent === 'urgent') {
+if (state === 'idle') {
+state = 'urgent_followup';
+return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
 }
-
 if (state === 'urgent_followup') {
 state = 'urgent_detail';
 return 'D’accord, je regarde ça avec vous. Depuis quand cela dure-t-il ?';
 }
-
 if (state === 'urgent_detail') {
 state = 'urgent_done';
 return 'Merci, je transmets immédiatement votre demande au cabinet.';
 }
+state = 'idle';
+return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
+}
 
+if (intent === 'hours') {
+state = 'idle';
+return 'Bien sûr. Le cabinet est ouvert du lundi au vendredi de 9h à 19h.';
+}
+
+if (intent === 'appointment') {
+if (state === 'idle') {
+state = 'appointment_followup';
+return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
+}
+if (state === 'appointment_followup') {
+state = 'appointment_done';
+return 'Parfait. Je transmets votre demande au cabinet.';
+}
+state = 'idle';
+return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
+}
+
+if (intent === 'greeting') {
+state = 'idle';
+return 'Avec plaisir. Que puis-je faire pour vous aujourd’hui ?';
+}
+
+state = 'idle';
 return 'Je transmets votre demande au cabinet. Souhaitez-vous que je prenne votre numéro ?';
 }
 
