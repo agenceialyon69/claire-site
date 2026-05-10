@@ -790,11 +790,14 @@ const chatSuggestions = document.getElementById('chatSuggestions');
 
 let typingNode = null;
 let replyTimer = null;
-let state = 'idle';
-let lastIntent = null;
+
+let state = {
+intent: null,
+step: 0
+};
 
 function scrollBottom() {
-requestAnimationFrame(function () {
+requestAnimationFrame(() => {
 chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 }
@@ -823,150 +826,191 @@ typingNode = null;
 }
 }
 
-function normalizeText(text) {
+function normalize(text) {
 return String(text)
 .toLowerCase()
 .normalize('NFD')
 .replace(/[\u0300-\u036f]/g, '')
-.replace(/[-]/g, ' ')
 .replace(/\s+/g, ' ')
+.replace(/[?!.,;:]/g, '')
 .trim();
 }
 
-function classify(message) {
-const msg = normalizeText(message);
-
+function detectIntent(msg) {
 if (/\b(mal|douleur|dent|sensibilite)\b/.test(msg)) return 'pain';
-if (/\b(urgence|gonfle|gonflement|saigne|saignement|dent cassee|accident)\b/.test(msg)) return 'urgent';
-if (/\b(rdv|rendez vous|rendezvous|reservation|reserver|rendez-vous)\b/.test(msg)) return 'appointment';
-if (/\b(horaire|horaires|ouvert|ouverture|ferme|fermeture)\b/.test(msg)) return 'hours';
-if (/\b(merci|bonjour|bonsoir)\b/.test(msg)) return 'greeting';
+if (/\b(urgence|gonfle|saigne|accident|casse)\b/.test(msg)) return 'urgent';
+if (/\b(rdv|rendez|reservation|reserver)\b/.test(msg)) return 'appointment';
+if (/\b(horaire|horaires|ouvert|ferme|heure)\b/.test(msg)) return 'hours';
+if (/\b(merci|bonjour|bonsoir|oui|non|hier|demain|avant-hier|aujourdhui)\b/.test(msg)) return 'continuation';
 return 'fallback';
 }
 
-function resetOnNewIntent(intent) {
-if (lastIntent && intent !== lastIntent) {
-state = 'idle';
-}
-lastIntent = intent;
+function isShortContinuation(msg) {
+const words = msg.split(' ').filter(Boolean);
+return words.length <= 2;
 }
 
 function reply(message) {
-const intent = classify(message);
-resetOnNewIntent(intent);
+const msg = normalize(message);
+const intent = detectIntent(msg);
 
-if (intent === 'pain') {
-if (state === 'idle') {
-state = 'pain_followup';
-return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
+if (state.intent && intent === 'continuation' && isShortContinuation(msg)) {
+if (state.intent === 'pain') {
+if (state.step === 1) {
+state.step = 2;
+return 'Merci. La douleur est-elle plutôt légère, modérée ou forte ?';
 }
-if (state === 'pain_followup') {
-state = 'pain_detail';
-return 'Merci, je note cela. La douleur est-elle plutôt légère, modérée ou forte ?';
+if (state.step === 2) {
+state.step = 0;
+state.intent = null;
+return 'Je transmets votre demande au cabinet pour un rappel rapide.';
 }
-if (state === 'pain_detail') {
-state = 'pain_done';
-return 'Je comprends. Je transmets votre demande au cabinet pour qu’il vous recontacte rapidement.';
-}
-state = 'idle';
-return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
 }
 
-if (intent === 'urgent') {
-if (state === 'idle') {
-state = 'urgent_followup';
+if (state.intent === 'urgent') {
+if (state.step === 1) {
+state.step = 2;
+return 'Depuis quand cela dure-t-il ?';
+}
+if (state.step === 2) {
+state.step = 0;
+state.intent = null;
+return 'Je transmets immédiatement votre demande au cabinet.';
+}
+}
+
+if (state.intent === 'appointment') {
+state.step = 0;
+state.intent = null;
+return 'Parfait. Je transmets votre demande au cabinet.';
+}
+}
+
+if (intent !== 'fallback' && intent !== 'continuation') {
+if (state.intent !== intent) {
+state.intent = intent;
+state.step = 0;
+}
+}
+
+if (state.intent === 'pain') {
+if (state.step === 0) {
+state.step = 1;
+return 'Je comprends, je vais vous aider. Depuis quand ressentez-vous cette douleur ?';
+}
+if (state.step === 1) {
+state.step = 2;
+return 'Merci. La douleur est-elle plutôt légère, modérée ou forte ?';
+}
+state.step = 0;
+state.intent = null;
+return 'Je transmets votre demande au cabinet pour un rappel rapide.';
+}
+
+if (state.intent === 'urgent') {
+if (state.step === 0) {
+state.step = 1;
 return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
 }
-if (state === 'urgent_followup') {
-state = 'urgent_detail';
-return 'D’accord, je regarde ça avec vous. Depuis quand cela dure-t-il ?';
+if (state.step === 1) {
+state.step = 2;
+return 'Depuis quand cela dure-t-il ?';
 }
-if (state === 'urgent_detail') {
-state = 'urgent_done';
-return 'Merci, je transmets immédiatement votre demande au cabinet.';
+state.step = 0;
+state.intent = null;
+return 'Je transmets immédiatement votre demande au cabinet.';
 }
-state = 'idle';
-return 'D’accord, je regarde ça avec vous. Pouvez-vous décrire rapidement la situation ?';
+
+if (state.intent === 'appointment') {
+if (state.step === 0) {
+state.step = 1;
+return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
+}
+state.step = 0;
+state.intent = null;
+return 'Parfait. Je transmets votre demande au cabinet.';
 }
 
 if (intent === 'hours') {
-state = 'idle';
-return 'Bien sûr. Le cabinet est ouvert du lundi au vendredi de 9h à 19h.';
+state.step = 0;
+state.intent = null;
+return 'Le cabinet est ouvert du lundi au vendredi de 9h à 19h.';
 }
 
-if (intent === 'appointment') {
-if (state === 'idle') {
-state = 'appointment_followup';
-return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
+if (intent === 'continuation') {
+if (state.intent === 'pain') {
+if (state.step === 1) {
+state.step = 2;
+return 'Merci. La douleur est-elle plutôt légère, modérée ou forte ?';
 }
-if (state === 'appointment_followup') {
-state = 'appointment_done';
-return 'Parfait. Je transmets votre demande au cabinet.';
+if (state.step === 2) {
+state.step = 0;
+state.intent = null;
+return 'Je transmets votre demande au cabinet pour un rappel rapide.';
 }
-state = 'idle';
-return 'Avec plaisir. Pour quel motif souhaitez-vous venir ?';
-}
-
-if (intent === 'greeting') {
-state = 'idle';
-return 'Avec plaisir. Que puis-je faire pour vous aujourd’hui ?';
 }
 
-state = 'idle';
-return 'Je transmets votre demande au cabinet. Souhaitez-vous que je prenne votre numéro ?';
+if (state.intent === 'urgent') {
+if (state.step === 1) {
+state.step = 2;
+return 'Depuis quand cela dure-t-il ?';
+}
+if (state.step === 2) {
+state.step = 0;
+state.intent = null;
+return 'Je transmets immédiatement votre demande au cabinet.';
+}
 }
 
-function sendMessage(text) {
-const raw = text || chatInput.value;
-const msg = String(raw).trim().slice(0, 220);
+state.step = 0;
+state.intent = null;
+return 'Je comprends. Souhaitez-vous que je vous mette en relation avec le cabinet ?';
+}
+
+state.step = 0;
+state.intent = null;
+return 'Je comprends. Souhaitez-vous que je vous mette en relation avec le cabinet ?';
+}
+
+function send(text) {
+const msg = String(text || chatInput.value).trim().slice(0, 220);
 if (!msg) return;
-
-if (replyTimer) {
-clearTimeout(replyTimer);
-replyTimer = null;
-}
 
 addBubble(msg, 'user');
 chatInput.value = '';
 addTyping();
 
-replyTimer = window.setTimeout(function () {
+clearTimeout(replyTimer);
+replyTimer = setTimeout(() => {
 removeTyping();
 addBubble(reply(msg), 'claire');
-replyTimer = null;
 }, 650);
 }
 
-chatSendBtn.addEventListener('click', function () {
-sendMessage();
-});
+chatSendBtn.addEventListener('click', () => send());
 
-chatInput.addEventListener('keydown', function (e) {
+chatInput.addEventListener('keydown', (e) => {
 if (e.key === 'Enter') {
 e.preventDefault();
-sendMessage();
+send();
 }
 });
 
-chatSuggestions.addEventListener('click', function (e) {
+chatSuggestions.addEventListener('click', (e) => {
 const btn = e.target.closest('.chat-suggestion');
 if (!btn) return;
-sendMessage(btn.dataset.msg || '');
+send(btn.dataset.msg);
 });
 
-document.querySelectorAll('.faq-item').forEach(function (item) {
+document.querySelectorAll('.faq-item').forEach((item) => {
 const button = item.querySelector('.faq-question');
 if (!button) return;
 
-button.addEventListener('click', function () {
+button.addEventListener('click', () => {
 const isActive = item.classList.contains('active');
 
-document.querySelectorAll('.faq-item').forEach(function (el) {
-el.classList.remove('active');
-});
-document.querySelectorAll('.faq-question').forEach(function (el) {
-el.setAttribute('aria-expanded', 'false');
-});
+document.querySelectorAll('.faq-item').forEach((el) => el.classList.remove('active'));
+document.querySelectorAll('.faq-question').forEach((el) => el.setAttribute('aria-expanded', 'false'));
 
 if (!isActive) {
 item.classList.add('active');
@@ -976,7 +1020,7 @@ button.setAttribute('aria-expanded', 'true');
 });
 });
 
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
 const embed = document.getElementById('calendlyEmbed');
 const fallback = document.getElementById('calendlyFallback');
 
