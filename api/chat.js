@@ -2,10 +2,10 @@
 // Claire V13 - Prompt système DYNAMIQUE par cabinet
 // Adapte les réponses aux infos spécifiques de chaque cabinet client
 
-import { getCabinet } from ‘./cabinets.js’;
+import { getCabinet } from './cabinets.js';
 
 export const config = {
-runtime: ‘edge’,
+runtime: 'edge',
 };
 
 // =====================================================
@@ -33,8 +33,8 @@ return `Tu es Claire, l’assistante virtuelle du ${cabinet.nom}.
 • Consultation : ${cabinet.consultation}
 • Détartrage : ${cabinet.detartrage}
 • Pour tout autre soin : “le devis est précisé en consultation”
-${cabinet.specialites ? `- Spécialités : ${cabinet.specialites}` : ‘’}
-${cabinet.notes ? `- À noter : ${cabinet.notes}` : ‘’}
+${cabinet.specialites ? `- Spécialités : ${cabinet.specialites}` : ''}
+${cabinet.notes ? `- À noter : ${cabinet.notes}` : ''}
 - Garde dentaire le soir/weekend : 04 72 11 69 69
 - Urgence vitale : 15 ou 112
 
@@ -116,10 +116,10 @@ Tu es Claire, assistante du ${cabinet.nom}. Tu es professionnelle, humaine, brè
 // FONCTION PRINCIPALE
 // =====================================================
 export default async function handler(req) {
-if (req.method !== ‘POST’) {
-return new Response(JSON.stringify({ error: ‘Method not allowed’ }), {
+if (req.method !== 'POST') {
+return new Response(JSON.stringify({ error: 'Method not allowed' }), {
 status: 405,
-headers: { ‘content-type’: ‘application/json’ },
+headers: { 'content-type': 'application/json' },
 });
 }
 
@@ -127,7 +127,6 @@ try {
 const body = await req.json();
 const { messages, cabinetId } = body;
 
-```
 // Récupération du cabinet (demo par défaut)
 const id = cabinetId || 'demo';
 
@@ -200,16 +199,15 @@ return new Response(JSON.stringify({ reply, cabinetId: id }), {
 status: 200,
 headers: { 'content-type': 'application/json' },
 });
-```
-
 } catch (err) {
-console.error(‘Erreur fonction chat:’, err);
+console.error('Erreur fonction chat:', err);
 return new Response(
 JSON.stringify({
 reply:
-“Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.”,
+"Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.",
 }),
-{ status: 200, headers: { ‘content-type’: ‘application/json’ } }
+{ status: 200, headers: { 'content-type': 'application/json' } }
 );
 }
 }
+
