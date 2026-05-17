@@ -31,7 +31,7 @@
 --charcoal:#1a1a1a;
 --slate:#4a4a4a;
 --gold:#c4945a;
---line: rgba(31,61,53,.12);
+--line:rgba(31,61,53,.12);
 --serif:'Fraunces',Georgia,serif;
 --sans:'Inter Tight',-apple-system,sans-serif;
 }
@@ -107,7 +107,7 @@ box-shadow:0 12px 28px rgba(0,0,0,.18)
 .sticky-mobile-cta{display:block}
 }
 
-.hero{padding:160px 0 90px;text-align:center}
+.hero{padding:160px 0 90px;text-align:center;background:var(–cream)}
 .hero-eyebrow{
 display:inline-flex;align-items:center;gap:8px;
 padding:6px 16px;
@@ -160,10 +160,7 @@ box-shadow:0 8px 24px rgba(31,61,53,.12)
 .section-dark .section-lead{color:rgba(245,240,232,.8)}
 
 .chat-wrapper{max-width:560px;margin:0 auto;background:#ECE5DD;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.15)}
-.chat-header{
-background:#075E54;color:#fff;padding:16px 20px;
-display:flex;align-items:center;gap:12px
-}
+.chat-header{background:#075E54;color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px}
 .chat-avatar{
 width:40px;height:40px;background:var(–cream);border-radius:50%;
 display:flex;align-items:center;justify-content:center;
@@ -205,14 +202,24 @@ padding:8px 16px;background:#fff;border-radius:100px;font-size:12px;font-weight:
 .reset-chat:hover{background:#f0f0f0}
 .demo-note{text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.5);font-style:italic}
 
-.value-card{padding:38px;background:var(–cream-warm);border-radius:16px;text-align:center;max-width:760px;margin:0 auto}
-.value-card p{font-size:18px;line-height:1.7;color:var(–slate)}
+.story-quote{
+font-family:var(–serif);
+font-style:italic;
+font-size:22px;
+color:var(–forest);
+padding-left:24px;
+border-left:3px solid var(–gold);
+margin:32px auto;
+line-height:1.5;
+max-width:680px;
+text-align:left;
+}
 
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:38px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:36px auto 0}
 @media (max-width:768px){.grid-3,.grid-2{grid-template-columns:1fr}}
 
-.roi-card{padding:32px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.08)}
+.roi-card{padding:32px;border-radius:16px;border:1px solid rgba(31,61,53,.12);background:transparent}
 .roi-card-loss .roi-number{color:#c8553d}
 .roi-card-gain{background:var(–forest);color:var(–cream);border:none}
 .roi-card-gain .roi-number{color:var(–gold)}
@@ -221,7 +228,7 @@ padding:8px 16px;background:#fff;border-radius:100px;font-size:12px;font-weight:
 .roi-detail{font-size:14px;opacity:.8}
 .roi-footnote{text-align:center;margin-top:24px;font-size:12px;color:var(–slate);opacity:.7;font-style:italic}
 
-.price-card{padding:42px 36px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.1);text-align:center}
+.price-card{padding:42px 36px;border-radius:16px;border:1px solid rgba(31,61,53,.12);text-align:center;background:transparent}
 .price-card.featured{background:var(–forest);color:var(–cream);border-color:var(–forest)}
 .price-tag{font-family:var(–serif);font-style:italic;opacity:.7;margin-bottom:8px}
 .price-amount{font-family:var(–serif);font-size:56px;font-weight:600;line-height:1;margin:16px 0 8px}
@@ -233,20 +240,13 @@ padding:8px 16px;background:#fff;border-radius:100px;font-size:12px;font-weight:
 .price-card.featured .price-cta{background:var(–gold);color:#fff}
 .price-card.featured .price-cta:hover{background:#b07d3e}
 
-.story-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
-.story-photo{
-aspect-ratio:4/5;background:var(–forest);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(–cream);font-family:var(–serif);font-style:italic;font-size:34px;letter-spacing:.06em;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.12)
-}
-.story-quote{font-family:var(–serif);font-style:italic;font-size:20px;color:var(–forest);padding-left:24px;border-left:3px solid var(–gold);margin:28px 0;line-height:1.5}
-@media (max-width:768px){.story-grid{grid-template-columns:1fr}.story-photo{max-width:280px;margin:0 auto}}
-
-.trust-card{padding:32px;background:#fff;border-radius:16px;border:1px solid rgba(31,61,53,.08)}
+.trust-card{padding:32px;border-radius:16px;border:1px solid rgba(31,61,53,.12);background:transparent}
 .trust-icon{width:40px;height:40px;background:var(–forest);color:var(–cream);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .trust-card h3{font-family:var(–serif);font-size:20px;font-weight:600;color:var(–forest);margin-bottom:8px}
 .trust-card p{font-size:14px;color:var(–slate)}
 
 .faq-list{max-width:720px;margin:0 auto}
-.faq-item{border-bottom:1px solid rgba(31,61,53,.1);padding:20px 0}
+.faq-item{border-bottom:1px solid rgba(31,61,53,.12);padding:20px 0}
 .faq-question{
 width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;
 font-family:var(–serif);font-size:18px;font-weight:500;color:var(–forest);padding:8px 0;background:transparent
@@ -313,7 +313,7 @@ footer a{color:var(–gold)}
 <section class="section section-dark" id="demo">
 <div class="container">
 <div class="section-header">
-<div class="section-eyebrow">Faites l'expérience</div>
+<div class="section-eyebrow">Faites l'experience</div>
 <h2 class="section-title">Posez une question. <em>Regardez.</em></h2>
 <p class="section-lead">Posez une question comme le ferait un patient. Vous verrez comment Claire répond en situation réelle.</p>
 </div>
@@ -365,12 +365,15 @@ footer a{color:var(–gold)}
 <div class="container">
 <div class="section-header">
 <div class="section-eyebrow">À propos</div>
-<h2 class="section-title">Claire est conçue et suivie personnellement.</h2>
+<h2 class="section-title">Claire est conçue et suivie <em>personnellement.</em></h2>
 <p class="section-lead">J'ai créé Claire après avoir étudié des centaines de conversations entre patients et cabinets dentaires. J'ai constaté la même chose partout : beaucoup d'appels manqués, des demandes répétées toute la journée, et des patients sans réponse après la fermeture.</p>
 </div>
-<div class="value-card">
-<p>Claire aide les cabinets à rester disponibles, sans alourdir le travail du secrétariat.<br><br>"Je cherche quelques cabinets fondateurs à Lyon pour construire une solution réellement utile, avec des retours terrain honnêtes."<br><br>Pas d'agence, pas de discours compliqué. Une démonstration simple, et vous voyez immédiatement si Claire peut aider votre cabinet.</p>
-</div>
+<blockquote class="story-quote">
+"Je cherche quelques cabinets fondateurs à Lyon pour construire une solution réellement utile, avec des retours terrain honnêtes."
+</blockquote>
+<p style="text-align:center;max-width:680px;margin:0 auto;color:var(--slate);font-size:15px;line-height:1.7;">
+Pas d'agence, pas de discours compliqué. Une démonstration simple, et vous voyez immédiatement si Claire peut aider votre cabinet.
+</p>
 </div>
 </section>
 
@@ -437,7 +440,7 @@ footer a{color:var(–gold)}
 </div>
 </section>
 
-<section class="section section-light">
+<section class="section section-warm">
 <div class="container">
 <div class="section-header">
 <div class="section-eyebrow">Trois engagements fermes</div>
@@ -463,7 +466,7 @@ footer a{color:var(–gold)}
 </div>
 </section>
 
-<section class="section section-warm">
+<section class="section section-light">
 <div class="container">
 <div class="section-header">
 <div class="section-eyebrow">Questions fréquentes</div>
@@ -477,7 +480,7 @@ footer a{color:var(–gold)}
 </div>
 </section>
 
-<section class="section section-light" id="booking">
+<section class="section section-warm" id="booking">
 <div class="container">
 <div class="section-header">
 <div class="section-eyebrow">Réserver une démo</div>
