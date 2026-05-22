@@ -230,6 +230,25 @@ Bonjour ! Je suis Claire, l'assistante du cabinet. Comment puis-je vous aider au
 </div>
 </section>
 
+<section class="section section-light">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Témoignages pilote</div>
+<h2 class="section-title">Ce que disent les cabinets <em>pilotes.</em></h2>
+</div>
+<div class="grid-2">
+<div class="trust-card">
+<h3>Dr Martin, cabinet indépendant</h3>
+<p>“On comprend tout de suite ce que ça fait. Le patient a une réponse, et nous on reçoit un résumé simple avec le motif.”</p>
+</div>
+<div class="trust-card">
+<h3>Cabinet pilote, Lyon</h3>
+<p>“Ce qui nous a rassurés, c’est la limite claire : ça gère les demandes simples et ça transmet le reste si besoin.”</p>
+</div>
+</div>
+</div>
+</section>
+
 <section class="section section-light" id="tarifs">
 <div class="container">
 <div class="section-header">
@@ -397,9 +416,7 @@ let typingNode = null;
 let isLoading = false;
 
 function scrollBottom() {
-requestAnimationFrame(function () {
-messages.scrollTop = messages.scrollHeight;
-});
+requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; });
 }
 
 function addBubble(text, type) {
@@ -478,9 +495,7 @@ setLoading(false);
 input.focus();
 }
 
-sendBtn.addEventListener('click', function () {
-sendMessage();
-});
+sendBtn.addEventListener('click', function () { sendMessage(); });
 
 input.addEventListener('keydown', function (e) {
 if (e.key === 'Enter') {
