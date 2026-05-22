@@ -18,24 +18,10 @@
 --sans:'Inter Tight',-apple-system,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-font-family:var(--sans);
-background:var(--cream);
-color:var(--charcoal);
-line-height:1.5;
-}
+body{font-family:var(--sans);background:var(--cream);color:var(--charcoal);line-height:1.5}
 .container{max-width:1180px;margin:0 auto;padding:0 32px}
-a{color:inherit;text-decoration:none}
 .hero{padding:140px 0 60px;text-align:center;background:var(--cream)}
-.hero h1{
-font-family:var(--serif);
-font-size:clamp(36px,5vw,52px);
-font-weight:500;
-line-height:1.1;
-letter-spacing:-.02em;
-color:var(--forest);
-margin-bottom:16px
-}
+.hero h1{font-family:var(--serif);font-size:clamp(36px,5vw,52px);font-weight:500;line-height:1.1;letter-spacing:-.02em;color:var(--forest);margin-bottom:16px}
 .hero-tagline{font-size:18px;line-height:1.6;color:var(--slate);max-width:680px;margin:8px auto 24px}
 
 .chat-wrapper{max-width:560px;margin:0 auto;background:#ECE5DD;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.15)}
@@ -65,7 +51,7 @@ Claire
 </div>
 </section>
 
-<!-- Chat interactif -->
+<!-- Chat interactif réel -->
 <section id="demo" style="padding-top:40px">
 <div class="container">
 <h2 style="text-align:center;margin-bottom:30px">Tester Claire en direct</h2>
@@ -79,4 +65,46 @@ Claire
 </div>
 <div class="chat-messages" id="chatMessages"></div>
 <div style="display:flex;gap:10px;padding:14px 16px;background:#fff;border-top:1px solid rgba(0,0,0,.05)">
-<input type="text" id="chatInput
+<input type="text" id="chatInput" placeholder="Posez une question comme si vous étiez un patient..." style="flex:1;border:none;background:#f0f0f0;border-radius:999px;padding:12px 18px;outline:none" autocomplete="off">
+<button id="chatSendBtn" style="width:42px;height:42px;background:var(--forest);color:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center">→</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Ce que Claire change -->
+<section style="background:var(--cream-warm)">
+<div class="container">
+<h2 style="text-align:center;margin-bottom:30px">Ce que Claire change pour votre cabinet</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:800px;margin:0 auto">
+<div>
+<strong>Avant Claire</strong>
+<ul style="margin-top:12px">
+<li>Appels perdus le soir et le week-end</li>
+<li>Secrétariat interrompu pendant les soins</li>
+<li>Patients qui raccrochent sans réponse</li>
+</ul>
+</div>
+<div>
+<strong>Avec Claire</strong>
+<ul style="margin-top:12px">
+<li>Les patients sont répondus 24h/24</li>
+<li>Le secrétariat est moins interrompu</li>
+<li>Vous recevez uniquement les demandes importantes</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Témoignage honnête -->
+<section>
+<div class="container" style="max-width:620px;margin:0 auto;text-align:center;background:white;padding:35px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+<p style="font-size:1.1rem;font-style:italic">
+“On ne rate plus les appels du soir. Claire gère les demandes simples et nous envoie seulement ce qui est important.”
+</p>
+<p style="margin-top:15px;color:#555">— Cabinet dentaire indépendant, Lyon</p>
+</div>
+</section>
+
+<!-- Offre -->
