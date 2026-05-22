@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claire — Assistante du cabinet dentaire</title>
-<meta name="description" content="Claire répond aux demandes de vos patients 24h/24.">
-<link rel="canonical" href="https://claireassistante.fr/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600&display=swap">
 <style>
-/* Ton design premium original conservé */
 :root{
 --forest:#1f3d35;
 --forest-deep:#15291f;
@@ -27,6 +25,7 @@ color:var(--charcoal);
 line-height:1.5;
 }
 .container{max-width:1180px;margin:0 auto;padding:0 32px}
+a{color:inherit;text-decoration:none}
 .hero{padding:140px 0 60px;text-align:center;background:var(--cream)}
 .hero h1{
 font-family:var(--serif);
@@ -39,7 +38,6 @@ margin-bottom:16px
 }
 .hero-tagline{font-size:18px;line-height:1.6;color:var(--slate);max-width:680px;margin:8px auto 24px}
 
-/* Chat style amélioré */
 .chat-wrapper{max-width:560px;margin:0 auto;background:#ECE5DD;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.15)}
 .chat-header{background:#075E54;color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px}
 .chat-avatar{width:40px;height:40px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-weight:600;color:var(--forest);font-size:18px}
@@ -51,144 +49,34 @@ margin-bottom:16px
 </head>
 <body>
 
-<nav>
-<div class="nav-inner">
-<a href="/" class="logo"><span class="logo-mark">C</span>Claire</a>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,232,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(31,61,53,.1);padding:18px 0">
+<div class="container" style="display:flex;justify-content:space-between;align-items:center">
+<a href="/" class="logo" style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--forest);display:flex;align-items:center;gap:10px">
+<span style="background:var(--forest);color:var(--cream);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:italic">C</span>
+Claire
+</a>
 </div>
 </nav>
 
 <section class="hero">
 <div class="container">
-<h1>Bonjour, je suis <em>Claire</em></h1>
-<p class="hero-tagline">Je réponds à vos patients 24h/24 et 7j/7. Je qualifie les demandes et je transmets uniquement ce qui est important au cabinet.</p>
+<h1>Vos patients appellent quand vous êtes fermé ?</h1>
+<p class="hero-tagline">Claire répond aux patients 24h/24 et 7j/7. Elle qualifie les demandes et transmet uniquement ce qui est important au cabinet.</p>
 </div>
 </section>
 
-<!-- Chat interactif réel -->
-<section id="demo" class="section">
+<!-- Chat interactif -->
+<section id="demo" style="padding-top:40px">
 <div class="container">
-<h2 class="section-title" style="text-align:center">Tester Claire en direct</h2>
+<h2 style="text-align:center;margin-bottom:30px">Tester Claire en direct</h2>
 <div class="chat-wrapper">
 <div class="chat-header">
 <div class="chat-avatar">C</div>
 <div>
 <div class="chat-header-name">Claire</div>
-<div class="chat-header-status"><span class="chat-status-dot"></span>en ligne</div>
+<div style="font-size:12px;opacity:.85">en ligne • répond en quelques secondes</div>
 </div>
 </div>
-
-<div class="chat-messages" id="chatMessages">
-<div class="chat-bubble chat-bubble-claire">
-<div>Bonjour ! Je suis Claire, l'assistante du cabinet. Comment puis-je vous aider aujourd'hui ?</div>
-</div>
-</div>
-
-<div class="chat-input-row">
-<input type="text" id="chatInput" placeholder="Posez une question comme si vous étiez un patient..." autocomplete="off">
-<button class="chat-send" id="chatSendBtn">→</button>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Ce que Claire change -->
-<section class="section">
-<div class="container">
-<h2 class="section-title">Ce que Claire change pour votre cabinet</h2>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:800px;margin:0 auto">
-<div>
-<strong>Avant Claire</strong>
-<ul>
-<li>Appels perdus le soir et le week-end</li>
-<li>Secrétariat interrompu pendant les soins</li>
-<li>Patients qui raccrochent sans réponse</li>
-</ul>
-</div>
-<div>
-<strong>Avec Claire</strong>
-<ul>
-<li>Les patients sont répondus 24h/24</li>
-<li>Le secrétariat est moins interrompu</li>
-<li>Vous recevez uniquement les demandes importantes</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Offre -->
-<section id="offre" class="section">
-<div class="container">
-<h2 class="section-title">Offre Fondateurs Claire – Limitée à 8 cabinets seulement</h2>
-<p style="text-align:center;font-size:1.2rem">89 € / mois pendant 12 mois (puis 149 € / mois)</p>
-<p style="text-align:center;color:#e74c3c;font-weight:700">8 cabinets fondateurs maximum</p>
-
-<button onclick="window.location.href='https://wa.me/33605800594?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20l%27offre%20fondateurs%20%C3%A0%2089%E2%82%AC'" class="btn-primary" style="display:block;margin:30px auto">
-Vérifier la disponibilité des 8 places fondateurs
-</button>
-
-<p style="text-align:center;font-size:0.95rem;color:#666">
-Le paiement est simplement mensualisé et sécurisé.<br>
-Je m’occupe de toute la mise en place, vous n’avez rien à gérer.
-</p>
-</div>
-</section>
-
-<footer style="background:var(--forest-deep);color:rgba(245,240,232,.6);padding:40px 0;text-align:center;font-size:13px">
-<p>Claire - Conçu à Lyon pour les cabinets dentaires</p>
-</footer>
-
-<script>
-// Chat interactif (adapté à ton API)
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const chatSendBtn = document.getElementById('chatSendBtn');
-
-let conversationHistory = [];
-
-function addBubble(text, type) {
-const bubble = document.createElement('div');
-bubble.className = `chat-bubble chat-bubble-${type}`;
-bubble.textContent = text;
-chatMessages.appendChild(bubble);
-chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-chatSendBtn.addEventListener('click', sendMessage);
-chatInput.addEventListener('keydown', (e) => {
-if (e.key === 'Enter') sendMessage();
-});
-
-async function sendMessage() {
-const message = chatInput.value.trim();
-if (!message) return;
-
-conversationHistory.push({ role: 'user', content: message });
-addBubble(message, 'user');
-chatInput.value = '';
-
-const typing = document.createElement('div');
-typing.className = 'chat-bubble chat-bubble-claire';
-typing.textContent = 'Claire est en train de répondre...';
-chatMessages.appendChild(typing);
-chatMessages.scrollTop = chatMessages.scrollHeight;
-
-try {
-const res = await fetch('/api/chat', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ messages: conversationHistory })
-});
-const data = await res.json();
-typing.remove();
-addBubble(data.reply, 'claire');
-conversationHistory.push({ role: 'assistant', content: data.reply });
-} catch (e) {
-typing.remove();
-addBubble("Désolé, une erreur est survenue. Vous pouvez contacter directement le cabinet.", 'claire');
-}
-}
-</script>
-
-</body>
-</html>
+<div class="chat-messages" id="chatMessages"></div>
+<div style="display:flex;gap:10px;padding:14px 16px;background:#fff;border-top:1px solid rgba(0,0,0,.05)">
+<input type="text" id="chatInput
