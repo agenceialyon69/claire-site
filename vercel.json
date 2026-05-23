@@ -1,9 +1,13 @@
 {
-"version": 2,
-"rewrites": [
+"$schema": "https://openapi.vercel.sh/vercel.json",
+"cleanUrls": true,
+"trailingSlash": false,
+"headers": [
 {
-"source": "/cabinet/:id",
-"destination": "/cabinet.html?id=:id"
+"source": "/api/(.*)",
+"headers": [
+{ "key": "Cache-Control", "value": "no-store" }
+]
 }
 ]
 }
