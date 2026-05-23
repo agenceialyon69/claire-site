@@ -1,57 +1,37 @@
 // /api/cabinets.js
-// Base de données simple des cabinets clients
-// Pour ajouter un cabinet : copie-colle un bloc et change les valeurs
-// Push sur GitHub → Vercel redéploie automatiquement
+// Données par cabinet. Le cabinet "demo" sert à la démo publique du site.
+// Pour ajouter un vrai cabinet client : copier le bloc et remplir ses infos.
 
-export const CABINETS = {
-// ====================================================
-// CABINET DE DÉMO (générique - pour la page d’accueil)
-// ====================================================
+const CABINETS = {
 demo: {
-nom: 'Cabinet dentaire',
-adresse: '12 avenue Jean Jaurès, 69200 Vénissieux',
-horaires: 'Lundi au vendredi, 9h à 19h',
-consultation: '30 €',
-detartrage: '60 à 90 €',
-telephone: '04 78 12 34 56',
-email: 'contact@claireassistante.fr',
-specialites: 'Soins généraux',
-notes: '',
+nom: 'cabinet dentaire',
+article: 'le', // "le cabinet" — usage générique pour la démo
+adresse: 'Lyon',
+horaires: 'du lundi au vendredi de 9h à 19h, et le samedi matin',
+telephone: '04 XX XX XX XX',
+consultation: 'à partir de 23€ (tarif conventionné)',
+detartrage: 'à partir de 28,92€ (tarif conventionné)',
+specialites: 'soins dentaires, détartrage, urgences, esthétique',
+notes: 'Cabinet de démonstration. Les coordonnées exactes sont communiquées au patient par le cabinet réel.',
+gardeDentaire: '04 72 11 69 69',
 },
 
-// ====================================================
-// EXEMPLE - À DUPLIQUER POUR CHAQUE CLIENT RÉEL
-// ====================================================
+// Exemple de vrai cabinet — à dupliquer/remplir lors d'un onboarding
 'dr-test': {
-nom: 'Cabinet du Dr Test',
+nom: 'cabinet du Dr Test',
+article: 'le',
 adresse: '15 rue de la République, 69002 Lyon',
-horaires: 'Lundi au vendredi 8h30-19h, samedi matin 9h-12h',
-consultation: '35 €',
-detartrage: '70 à 100 €',
+horaires: 'du lundi au vendredi de 9h à 19h',
 telephone: '04 78 00 00 00',
-email: 'test@example.com',
-specialites: 'Endodontie, dentisterie esthétique',
-notes: 'Cabinet pédiatrique le mercredi après-midi',
+consultation: 'à partir de 23€',
+detartrage: 'à partir de 28,92€',
+specialites: 'soins généraux, prothèses, implants',
+notes: '',
+gardeDentaire: '04 72 11 69 69',
 },
-
-// ====================================================
-// AJOUTE TES VRAIS CABINETS CI-DESSOUS
-// ====================================================
-// 'dr-martin': {
-// nom: 'Cabinet du Dr Martin',
-// adresse: '…',
-// horaires: '…',
-// consultation: '…',
-// detartrage: '…',
-// telephone: '…',
-// email: '…',
-// specialites: '…',
-// notes: '',
-// },
 };
 
-// Helper : récupère un cabinet par son ID, ou retourne le démo
-export function getCabinet(id) {
-return CABINETS[id] || CABINETS['demo'];
+export function getCabinet(cabinetId) {
+return CABINETS[cabinetId] || CABINETS.demo;
 }
 
