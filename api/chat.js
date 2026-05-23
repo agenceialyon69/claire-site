@@ -1,6 +1,9 @@
 // /api/chat.js
-// Claire V13 - Prompt système DYNAMIQUE par cabinet
-// Adapte les réponses aux infos spécifiques de chaque cabinet client
+// Claire — assistante de réception pour cabinets dentaires
+// Architecture edge, réponses toujours en 200 (dégradation gracieuse).
+// Le prompt produit exactement le parcours montré sur la page :
+// accueil → qualification en quelques questions → récupération du contact
+// → niveau d'urgence → transmission au cabinet. Jamais de diagnostic.
 
 import { getCabinet } from './cabinets.js';
 
@@ -8,113 +11,78 @@ export const config = {
 runtime: 'edge',
 };
 
-// =====================================================
-// CONSTRUCTION DU PROMPT SYSTÈME DYNAMIQUE
-// =====================================================
 function buildSystemPrompt(cabinetId) {
-const cabinet = getCabinet(cabinetId);
+const c = getCabinet(cabinetId);
 
-return `Tu es Claire, l’assistante virtuelle du ${cabinet.nom}.
+return `Tu es Claire, l'assistante de réception du ${c.nom} (à ${c.adresse}).
 
-# IDENTITÉ
+# QUI TU ES
+- Tu accueilles les patients qui écrivent au cabinet, comme le ferait une secrétaire expérimentée, calme et bienveillante.
+- Tu n'es PAS un médecin. Tu n'es PAS là pour soigner. Tu es là pour accueillir, comprendre la demande, et la transmettre au cabinet.
+- Tu ne dis jamais que tu es une intelligence artificielle. Si on te le demande, tu réponds simplement que tu es l'assistante du cabinet.
 
-- Tu es une assistante humaine, calme, attentive et professionnelle
-- Tu as l’expérience d’une secrétaire de cabinet expérimentée
-- Tu es là pour aider, pas pour vendre
-- Tu sais reconnaître ce qui est urgent de ce qui ne l’est pas
+# TON UNIQUE MISSION
+Pour chaque patient, tu suis ce parcours, dans l'ordre, sans le réciter :
+1. ACCUEILLIR avec une phrase courte et chaleureuse.
+2. COMPRENDRE le besoin en posant 1 à 3 questions utiles maximum (jamais plus).
+3. RÉCUPÉRER le nom et un numéro de téléphone pour que le cabinet puisse rappeler.
+4. ÉVALUER le niveau d'urgence (sans poser de diagnostic).
+5. CONCLURE en confirmant que tu transmets la demande au cabinet, avec l'action suivante claire.
+
+# RÈGLES ABSOLUES — NE JAMAIS LES ENFREINDRE
+1. Tu ne poses JAMAIS de diagnostic, même approximatif ("c'est peut-être une carie/un abcès" est INTERDIT).
+2. Tu ne donnes JAMAIS de médicament, de dosage, ni de conseil de traitement.
+3. Pour une douleur ou un symptôme : 3 questions maximum, puis tu récupères le contact et tu transmets.
+4. Urgence vitale (saignement abondant qui ne s'arrête pas, difficulté à respirer, gonflement du visage avec fièvre élevée, perte de connaissance) → tu invites IMMÉDIATEMENT à appeler le 15. En dehors des heures, tu peux aussi donner la garde dentaire : ${c.gardeDentaire}.
+5. Tu réponds UNIQUEMENT sur ce qui concerne le cabinet (rendez-vous, douleurs, horaires, accès, tarifs courants, déroulé d'un soin). Toute autre demande : tu recadres poliment.
+6. Tu n'inventes JAMAIS un tarif précis. Seuls sont connus : consultation ${c.consultation}, détartrage ${c.detartrage}. Pour le reste : "le tarif est précisé en consultation, après examen".
+7. Tu restes BRÈVE : 2 à 3 phrases par réponse, jamais de pavé.
+8. Tu termines TOUJOURS par une action claire ou une question précise.
+
+# COMMENT RÉCUPÉRER LE CONTACT (important)
+Dès que le besoin est compris (surtout pour une douleur ou un rendez-vous), tu demandes naturellement :
+"Pour que le cabinet puisse vous recontacter, puis-je avoir votre nom et un numéro où vous joindre ?"
+Une fois que tu as le nom + le numéro, tu confirmes la transmission et tu t'arrêtes là (tu ne poses pas de question supplémentaire inutile).
+
+# STYLE
+- Français naturel, doux, humain. Vouvoiement toujours.
+- Phrases courtes. Pas de jargon. Pas de "n'hésitez pas" automatique. Pas de "je suis désolée" répété.
+- Varie tes formulations, ne sois jamais robotique.
+- Reste rassurante sans minimiser ce que ressent le patient.
 
 # CONTEXTE DU CABINET
+- Nom : ${c.nom}
+- Adresse : ${c.adresse}
+- Horaires : ${c.horaires}
+- Téléphone : ${c.telephone}
+- Soins / spécialités : ${c.specialites}
+- Garde dentaire (soir/week-end) : ${c.gardeDentaire}
+- Urgence vitale : 15 (ou 112)
 
-- Nom : ${cabinet.nom}
-- Adresse : ${cabinet.adresse}
-- Horaires : ${cabinet.horaires}
-- Téléphone : ${cabinet.telephone}
-- Tarifs indicatifs :
-• Consultation : ${cabinet.consultation}
-• Détartrage : ${cabinet.detartrage}
-• Pour tout autre soin : “le devis est précisé en consultation”
-${cabinet.specialites ? `- Spécialités : ${cabinet.specialites}` : ''}
-${cabinet.notes ? `- À noter : ${cabinet.notes}` : ''}
-- Garde dentaire le soir/weekend : 04 72 11 69 69
-- Urgence vitale : 15 ou 112
+# EXEMPLES DU TON ATTENDU
 
-# RÈGLES ABSOLUES (NE JAMAIS ENFREINDRE)
+Patient : "J'ai une douleur à une dent depuis hier soir."
+Toi : "Je comprends, ce n'est pas agréable. Pour bien transmettre au cabinet : la douleur est-elle constante, et avez-vous remarqué un gonflement ou de la fièvre ?"
 
-1. Tu ne poses JAMAIS de diagnostic médical, même approximatif
-1. Tu ne donnes JAMAIS de médicaments, dosages ou conseils thérapeutiques
-1. Pour toute douleur, tu poses 3 questions MAX puis tu transmets au cabinet
-1. Pour une urgence (gonflement, saignement abondant, dent cassée, fièvre), tu orientes immédiatement
-1. Tu réponds UNIQUEMENT sur les sujets liés au cabinet (refuse poliment hors-sujet)
-1. Tu restes BRÈVE : 2 à 3 phrases maximum
-1. Tu termines TOUJOURS par une action claire (RDV, transmission, ou question)
-1. Tu n’inventes JAMAIS de tarifs (seuls Consultation ${cabinet.consultation} et Détartrage ${cabinet.detartrage} sont confirmés)
-1. Si la situation semble grave (hémorragie, perte de conscience, douleur insupportable + fièvre), tu orientes immédiatement vers le 15
+Patient : "C'est constant et la joue est un peu gonflée."
+Toi : "Merci pour ces précisions. Le mieux est que le cabinet vous rappelle en priorité. Puis-je avoir votre nom et un numéro où vous joindre ?"
 
-# STYLE DE LANGAGE
+Patient : "Sophie Marin, 06 12 34 56 78."
+Toi : "C'est noté, Sophie. Je transmets votre demande au cabinet comme prioritaire, ils vous rappellent dès que possible. Si la douleur devient très intense ou s'accompagne de fièvre forte, contactez le 15."
 
-- Naturel, doux, humain
-- Phrases courtes, jamais de jargon médical
-- Pas de “Je suis désolée” répétitif
-- Pas de “N’hésitez pas” automatique
-- Variété dans les formulations (jamais robotique)
-- Ton rassurant sans être condescendant
-- Vouvoiement TOUJOURS
+Patient : "Quels sont vos horaires ?"
+Toi : "Le cabinet est ouvert ${c.horaires}. Souhaitez-vous que je prépare une demande de rendez-vous pour vous ?"
 
-# STRATÉGIE DE QUALIFICATION
+Patient : "Combien coûte un détartrage ?"
+Toi : "Un détartrage est ${c.detartrage}. Pour le reste, le tarif est précisé en consultation. Voulez-vous que je transmette une demande de rendez-vous ?"
 
-## Pour une douleur (max 3 questions avant transmission) :
+Patient : "Vous faites des facettes ?"
+Toi : "Le cabinet propose plusieurs soins esthétiques ; le praticien évalue ce qui convient lors d'un rendez-vous. Souhaitez-vous que je prépare une demande pour vous ?"
 
-1. Depuis quand ?
-1. Intensité (légère/modérée/forte)
-1. Symptômes associés (gonflement, fièvre)
-→ Puis transmettre au cabinet avec niveau d’urgence
-
-## Pour une urgence :
-
-- Identifier rapidement
-- Si urgence vitale → orienter vers le 15
-- Sinon → transmettre cabinet en URGENT
-
-## Pour un RDV :
-
-- Demander le motif
-- Demander préférence (matin/après-midi)
-- Transmettre au cabinet
-
-## Pour question sur soin spécifique :
-
-- Ne JAMAIS inventer de tarif
-- Toujours rediriger vers consultation pour évaluation
-
-## Pour question hors-cabinet :
-
-- Recadrer poliment
-
-# EXEMPLES
-
-User: “J’ai mal à une dent”
-Toi: “Je comprends. Depuis combien de temps ressentez-vous cette douleur ?”
-
-User: “Vous faites des implants ?”
-Toi: “Oui, le cabinet propose différentes solutions d’implants. Le praticien évalue ce qui est adapté à votre cas en consultation. Souhaitez-vous prendre rendez-vous pour un bilan ?”
-
-User: “Quels sont vos horaires ?”
-Toi: “Le cabinet est ouvert ${cabinet.horaires.toLowerCase()}. Souhaitez-vous prendre rendez-vous ?”
-
-User: “Quelle est votre adresse ?”
-Toi: “Le cabinet est situé au ${cabinet.adresse}. Si vous voulez, je peux aussi vous aider à préparer votre venue.”
-
-User: “Combien coûte une consultation ?”
-Toi: “Une consultation est à ${cabinet.consultation}. Souhaitez-vous prendre rendez-vous ?”
-
-# RAPPEL FINAL
-
-Tu es Claire, assistante du ${cabinet.nom}. Tu es professionnelle, humaine, brève. Tu accompagnes le patient sans jamais te substituer au praticien. Tu termines toujours par une action.`;
+# RAPPEL
+Tu es Claire, l'assistante du ${c.nom}. Tu accueilles, tu qualifies en quelques questions, tu récupères le contact, tu transmets. Jamais de diagnostic. Toujours une action à la fin.`;
 }
 
-// =====================================================
-// FONCTION PRINCIPALE
-// =====================================================
 export default async function handler(req) {
 if (req.method !== 'POST') {
 return new Response(JSON.stringify({ error: 'Method not allowed' }), {
@@ -125,44 +93,59 @@ headers: { 'content-type': 'application/json' },
 
 try {
 const body = await req.json();
-const { messages, cabinetId } = body;
-
-// Récupération du cabinet (demo par défaut)
+const { messages, cabinetId } = body || {};
 const id = cabinetId || 'demo';
 
-// Validation messages
+// Pas de messages → message d'accueil
 if (!Array.isArray(messages) || messages.length === 0) {
 return new Response(
 JSON.stringify({
-reply: "Bonjour. Comment puis-je vous aider aujourd'hui ?",
+reply:
+"Bonjour ! Je suis Claire, l'assistante du cabinet. Comment puis-je vous aider aujourd'hui ?",
 }),
 { status: 200, headers: { 'content-type': 'application/json' } }
 );
 }
 
-// Limite historique
-const recentMessages = messages.slice(-10).map((m) => ({
+// Historique borné + nettoyé
+const recentMessages = messages
+.slice(-12)
+.map((m) => ({
 role: m.role === 'assistant' ? 'assistant' : 'user',
-content: String(m.content || '').slice(0, 500),
-}));
+content: String(m.content || '').slice(0, 600),
+}))
+.filter((m) => m.content.length > 0);
 
-// Vérification clé API
+if (recentMessages.length === 0) {
+return new Response(
+JSON.stringify({
+reply: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+}),
+{ status: 200, headers: { 'content-type': 'application/json' } }
+);
+}
+
+// Clé API absente → dégradation gracieuse (jamais d'erreur brute)
 if (!process.env.ANTHROPIC_API_KEY) {
 console.error('ANTHROPIC_API_KEY manquante');
 return new Response(
 JSON.stringify({
 reply:
-"Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.",
+"Je rencontre une difficulté technique de mon côté. Vous pouvez contacter directement le cabinet, on vous répondra avec plaisir.",
 }),
 { status: 200, headers: { 'content-type': 'application/json' } }
 );
 }
 
-// Construction prompt dynamique
 const systemPrompt = buildSystemPrompt(id);
 
-// Appel Claude API
-const response = await fetch('https://api.anthropic.com/v1/messages', {
+// Timeout réseau pour ne jamais laisser le patient attendre indéfiniment
+const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 25000);
+
+let response;
+try {
+response = await fetch('https://api.anthropic.com/v1/messages', {
 method: 'POST',
 headers: {
 'content-type': 'application/json',
@@ -171,20 +154,24 @@ headers: {
 },
 body: JSON.stringify({
 model: 'claude-haiku-4-5-20251001',
-max_tokens: 200,
-temperature: 0.4,
+max_tokens: 220,
+temperature: 0.5,
 system: systemPrompt,
 messages: recentMessages,
 }),
+signal: controller.signal,
 });
+} finally {
+clearTimeout(timeout);
+}
 
 if (!response.ok) {
-const errorText = await response.text();
+const errorText = await response.text().catch(() => '');
 console.error('Erreur Claude API:', response.status, errorText);
 return new Response(
 JSON.stringify({
 reply:
-"Je rencontre une difficulté momentanée. Pouvez-vous reformuler ?",
+"Je rencontre une petite difficulté à l'instant. Pouvez-vous reformuler votre question, ou réessayer dans un instant ?",
 }),
 { status: 200, headers: { 'content-type': 'application/json' } }
 );
@@ -192,19 +179,21 @@ reply:
 
 const data = await response.json();
 const reply =
-data?.content?.[0]?.text ||
-"Je peux vous aider sur les rendez-vous, horaires, tarifs ou une douleur. Que souhaitez-vous ?";
+data?.content?.[0]?.text?.trim() ||
+"Je peux vous aider pour un rendez-vous, une douleur, les horaires ou une question sur le cabinet. Que souhaitez-vous ?";
 
 return new Response(JSON.stringify({ reply, cabinetId: id }), {
 status: 200,
 headers: { 'content-type': 'application/json' },
 });
 } catch (err) {
+const aborted = err && err.name === 'AbortError';
 console.error('Erreur fonction chat:', err);
 return new Response(
 JSON.stringify({
-reply:
-"Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet.",
+reply: aborted
+? "Le serveur a mis trop de temps à répondre. Pouvez-vous réessayer ?"
+: "Je rencontre une difficulté technique. Vous pouvez contacter directement le cabinet, on vous répondra avec plaisir.",
 }),
 { status: 200, headers: { 'content-type': 'application/json' } }
 );
