@@ -11,6 +11,90 @@ export const config = {
 runtime: 'edge',
 };
 
+// Webhook Make : reçoit la demande patient une fois qu'elle est complète
+// (nom + téléphone récupérés), puis Make l'enregistre dans Supabase et
+// envoie l'email de notification au cabinet.
+const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/4vdfghgpuamgmm2o2xrdyt51ueo2gyll';
+
+// Détecte un numéro de téléphone français dans un texte (au moins 10 chiffres)
+function findPhone(text) {
+const cleaned = String(text || '').replace(/[\s.\-()]/g, '');
+const match = cleaned.match(/(?:\+33|0)\d{9}/);
+return match ? match[0] : null;
+}
+
+function systemPromptApiKey() {
+return process.env.ANTHROPIC_API_KEY;
+}
+
+// Extrait les infos structurées de la conversation puis envoie à Make.
+// Ne bloque jamais la réponse au patient : tout échec est silencieux côté patient.
+async function extractAndSend(conversationText, phone, cabinetId, apiKey) {
+let nom = '';
+let motif = '';
+let date_souhaitee = '';
+let urgence = '';
+
+try {
+const extraction = await fetch('https://api.anthropic.com/v1/messages', {
+method: 'POST',
+headers: {
+'content-type': 'application/json',
+'x-api-key': apiKey,
+'anthropic-version': '2023-06-01',
+},
+body: JSON.stringify({
+model: 'claude-haiku-4-5-20251001',
+max_tokens: 300,
+temperature: 0,
+system:
+"Tu extrais les informations d'une conversation entre un patient et l'assistante d'un cabinet dentaire. " +
+"Réponds UNIQUEMENT avec un objet JSON valide, sans aucun texte autour, au format exact : " +
+'{"nom":"", "motif":"", "date_souhaitee":"", "urgence":""}. ' +
+"Règles : 'nom' = le nom/prénom du patient s'il est donné, sinon vide. " +
+"'motif' = la raison de la demande en une phrase courte. " +
+"'date_souhaitee' = la disponibilité ou préférence de rendez-vous si mentionnée (ex: 'matin', 'cette semaine'), sinon vide. " +
+"'urgence' = 'élevée', 'moyenne' ou 'faible' selon la gravité décrite. Ne mets jamais de diagnostic.",
+messages: [{ role: 'user', content: conversationText }],
+}),
+});
+
+if (extraction.ok) {
+const exData = await extraction.json();
+const raw = exData?.content?.[0]?.text?.trim() || '{}';
+const jsonMatch = raw.match(/\{[\s\S]*\}/);
+if (jsonMatch) {
+const parsed = JSON.parse(jsonMatch[0]);
+nom = parsed.nom || '';
+motif = parsed.motif || '';
+date_souhaitee = parsed.date_souhaitee || '';
+urgence = parsed.urgence || '';
+}
+}
+} catch (err) {
+console.error('Extraction infos echouee (non bloquant):', err);
+}
+
+// Envoi à Make avec les champs correspondant exactement aux colonnes Supabase
+try {
+await fetch(MAKE_WEBHOOK_URL, {
+method: 'POST',
+headers: { 'content-type': 'application/json' },
+body: JSON.stringify({
+nom: nom,
+telephone: phone,
+motif: motif,
+"date souhaitee": date_souhaitee,
+urgence: urgence,
+cabinet: cabinetId,
+conversation: conversationText,
+}),
+});
+} catch (err) {
+console.error('Envoi Make echoue (non bloquant):', err);
+}
+}
+
 function buildSystemPrompt(cabinetId) {
 const c = getCabinet(cabinetId);
 
@@ -181,6 +265,24 @@ const data = await response.json();
 const reply =
 data?.content?.[0]?.text?.trim() ||
 "Je peux vous aider pour un rendez-vous, une douleur, les horaires ou une question sur le cabinet. Que souhaitez-vous ?";
+
+// Transmission au cabinet : si le patient a laissé un numéro de téléphone,
+// la demande est "complète" → on extrait les infos et on les envoie à Make.
+const patientMessages = recentMessages
+.filter((m) => m.role === 'user')
+.map((m) => m.content)
+.join(' ');
+const phone = findPhone(patientMessages);
+
+if (phone) {
+// On demande à Claire d'extraire les infos en JSON structuré,
+// pour remplir proprement les colonnes Supabase (nom, motif, etc.).
+const conversationText = recentMessages
+.map((m) => (m.role === 'user' ? 'Patient: ' : 'Claire: ') + m.content)
+.join('\n');
+
+extractAndSend(conversationText, phone, id, systemPromptApiKey());
+}
 
 return new Response(JSON.stringify({ reply, cabinetId: id }), {
 status: 200,
