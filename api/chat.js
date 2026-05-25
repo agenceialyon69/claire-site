@@ -15,7 +15,7 @@ runtime: 'edge',
 // (nom + téléphone récupérés), puis Make l'enregistre dans Supabase et
 // envoie l'email de notification au cabinet.
 // L'URL est stockée en variable d'environnement Vercel (jamais dans le code public).
-const MAKE_WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL;
+const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/5k3ii9ns4a3k5wp4l47o5jeywbax0ptj';
 
 // Détecte un numéro de téléphone français dans un texte (au moins 10 chiffres)
 function findPhone(text) {
@@ -320,4 +320,4 @@ reply: aborted
 );
 }
 }
-
+Nouveau
