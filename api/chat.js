@@ -14,7 +14,6 @@ runtime: 'edge',
 // Webhook Make : reçoit la demande patient une fois qu'elle est complète
 // (nom + téléphone récupérés), puis Make l'enregistre dans Supabase et
 // envoie l'email de notification au cabinet.
-// L'URL est stockée en variable d'environnement Vercel (jamais dans le code public).
 const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/5k3ii9ns4a3k5wp4l47o5jeywbax0ptj';
 
 // Détecte un numéro de téléphone français dans un texte (au moins 10 chiffres)
@@ -77,10 +76,6 @@ console.error('Extraction infos echouee (non bloquant):', err);
 }
 
 // Envoi à Make avec les champs correspondant exactement aux colonnes Supabase
-if (!MAKE_WEBHOOK_URL) {
-console.error('MAKE_WEBHOOK_URL manquante : demande non transmise.');
-return;
-}
 try {
 await fetch(MAKE_WEBHOOK_URL, {
 method: 'POST',
@@ -320,4 +315,3 @@ reply: aborted
 );
 }
 }
-Nouveau
