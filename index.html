@@ -212,7 +212,7 @@ font-family:var(--serif);font-style:italic;font-weight:600;color:var(--forest);f
 .chat-status-dot{display:inline-block;width:8px;height:8px;background:#4ade80;border-radius:50%;margin-right:6px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .chat-messages{
-height:440px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:8px;background:#ECE5DD;-webkit-overflow-scrolling:touch
+height:440px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:8px;background:#ECE5DD;-webkit-overflow-scrolling:touch;overscroll-behavior:contain
 }
 .chat-bubble{
 max-width:80%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.4;word-wrap:break-word;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08);animation:bubbleAppear .35s ease forwards
@@ -346,9 +346,9 @@ background:rgba(255,255,255,.15);border:none;border-radius:50%;color:var(--cream
 /* MODE PLEIN ÉCRAN MOBILE : activé via la classe .chat-fullscreen sur le wrapper */
 @media (max-width:680px){
 .chat-wrapper.chat-fullscreen{
-position:fixed;inset:0;z-index:1000;margin:0;width:100%;max-width:none;
+position:fixed;top:0;left:0;right:0;z-index:1000;margin:0;width:100%;max-width:none;
 border-radius:0;box-shadow:none;display:flex;flex-direction:column;
-height:100dvh;height:100vh; /* fallback puis dvh pour gérer le clavier */
+height:100vh;height:100dvh; /* vh en secours, dvh prioritaire ; ajusté en JS quand le clavier s'ouvre */
 animation:chatSlideUp .28s ease;
 }
 .chat-wrapper.chat-fullscreen .chat-back{display:flex}
@@ -775,7 +775,14 @@ let isLoading = false;
 let currentAbortController = null;
 const CABINET_ID = 'demo';
 
-function scrollToBottom(){ requestAnimationFrame(function(){ messagesDiv.scrollTop = messagesDiv.scrollHeight; }); }
+function scrollToBottom(){
+requestAnimationFrame(function(){ messagesDiv.scrollTop = messagesDiv.scrollHeight; });
+// en plein écran mobile, le layout bouge (clavier) : on insiste pour garantir
+// que le dernier message reste visible
+[60, 180, 360].forEach(function(d){
+setTimeout(function(){ messagesDiv.scrollTop = messagesDiv.scrollHeight; }, d);
+});
+}
 
 function addBubble(text, type){
 const bubble = document.createElement('div');
@@ -896,48 +903,72 @@ if (btn) sendMessage(btn.dataset.msg);
 }
 if (resetBtn) resetBtn.addEventListener('click', resetConversation);
 
-/* ===== PLEIN ÉCRAN MOBILE ===== */
+/* ===== PLEIN ÉCRAN MOBILE — version universelle (iPhone / Android) ===== */
 const chatWrapper = document.querySelector('.chat-wrapper');
 const backBtn = document.getElementById('chatBackBtn');
 const MOBILE_BREAKPOINT = 680;
 
 function isMobile(){ return window.matchMedia('(max-width:' + MOBILE_BREAKPOINT + 'px)').matches; }
+function isFullscreen(){ return chatWrapper.classList.contains('chat-fullscreen'); }
+
+// Cale la hauteur du chat sur la zone RÉELLEMENT visible (au-dessus du clavier).
+// C'est la clé : on s'ancre sur visualViewport, qui rétrécit quand le clavier s'ouvre.
+function syncHeight(){
+if (!isFullscreen()) return;
+var h, top;
+if (window.visualViewport){
+h = window.visualViewport.height;
+top = window.visualViewport.offsetTop || 0;
+} else {
+h = window.innerHeight; top = 0;
+}
+chatWrapper.style.height = h + 'px';
+chatWrapper.style.top = top + 'px';
+keepLastMessageVisible();
+}
+
+function keepLastMessageVisible(){
+// plusieurs passes : le clavier et le layout se stabilisent à des vitesses variables selon les tél.
+requestAnimationFrame(function(){ messagesDiv.scrollTop = messagesDiv.scrollHeight; });
+[50, 150, 300, 500].forEach(function(d){
+setTimeout(function(){ if (isFullscreen()) messagesDiv.scrollTop = messagesDiv.scrollHeight; }, d);
+});
+}
 
 function openFullscreen(){
-if (!isMobile() || chatWrapper.classList.contains('chat-fullscreen')) return;
+if (!isMobile() || isFullscreen()) return;
 chatWrapper.classList.add('chat-fullscreen');
 document.body.classList.add('chat-open');
-scrollToBottom();
+syncHeight();
+[120, 300, 500, 800].forEach(function(d){ setTimeout(syncHeight, d); });
 }
 function closeFullscreen(){
-if (!chatWrapper.classList.contains('chat-fullscreen')) return;
+if (!isFullscreen()) return;
 chatWrapper.classList.remove('chat-fullscreen');
 document.body.classList.remove('chat-open');
+chatWrapper.style.height = '';
+chatWrapper.style.top = '';
 if (input) input.blur();
 }
 
-// On passe en plein écran dès que l'utilisateur entre dans la conversation (mobile uniquement)
-if (input) input.addEventListener('focus', openFullscreen);
-if (suggestionsDiv) suggestionsDiv.addEventListener('click', function(){ openFullscreen(); });
-
-// Bouton retour
+// Entrer dans la conversation = plein écran (mobile only)
+if (input){
+input.addEventListener('focus', function(){
+openFullscreen();
+[120, 350, 600].forEach(function(d){ setTimeout(syncHeight, d); });
+});
+}
+if (suggestionsDiv) suggestionsDiv.addEventListener('click', openFullscreen);
 if (backBtn) backBtn.addEventListener('click', closeFullscreen);
 
-// Le bouton "retour" matériel / geste de retour ferme le plein écran avant de quitter la page
-window.addEventListener('popstate', function(){
-if (chatWrapper.classList.contains('chat-fullscreen')) closeFullscreen();
-});
-
-// Si on repasse en grand écran (rotation, redimensionnement), on sort du mode plein écran
-window.addEventListener('resize', function(){
-if (!isMobile()) closeFullscreen();
-});
-
-// Quand le clavier mobile s'ouvre/se ferme, on garde la dernière réponse visible
-if (window.visualViewport) {
-window.visualViewport.addEventListener('resize', function(){
-if (chatWrapper.classList.contains('chat-fullscreen')) scrollToBottom();
-});
+// bouton/geste retour du téléphone
+window.addEventListener('popstate', function(){ if (isFullscreen()) closeFullscreen(); });
+// rotation / passage en grand écran
+window.addEventListener('resize', function(){ if (!isMobile()) closeFullscreen(); else syncHeight(); });
+// le clavier s'ouvre/se ferme : visualViewport change → on recale tout
+if (window.visualViewport){
+window.visualViewport.addEventListener('resize', syncHeight);
+window.visualViewport.addEventListener('scroll', syncHeight);
 }
 
 document.querySelectorAll('.faq-item').forEach(function(item){
