@@ -337,6 +337,31 @@ font-family:var(--serif);font-size:18px;font-weight:500;color:var(--forest);padd
 .final-cta .btn-primary:hover{background:#b07d3e}
 footer{padding:40px 0;background:var(--forest-deep);color:rgba(245,240,232,.6);font-size:13px;text-align:center;border-top:1px solid rgba(255,255,255,.05)}
 footer a{color:var(--gold)}
+
+/* Bouton retour du chat : caché par défaut (desktop), visible en plein écran mobile */
+.chat-back{display:none;align-items:center;justify-content:center;width:36px;height:36px;margin-right:6px;
+background:rgba(255,255,255,.15);border:none;border-radius:50%;color:var(--cream);cursor:pointer;flex-shrink:0;transition:background .2s}
+.chat-back:hover{background:rgba(255,255,255,.28)}
+
+/* MODE PLEIN ÉCRAN MOBILE : activé via la classe .chat-fullscreen sur le wrapper */
+@media (max-width:680px){
+.chat-wrapper.chat-fullscreen{
+position:fixed;inset:0;z-index:1000;margin:0;width:100%;max-width:none;
+border-radius:0;box-shadow:none;display:flex;flex-direction:column;
+height:100dvh;height:100vh; /* fallback puis dvh pour gérer le clavier */
+animation:chatSlideUp .28s ease;
+}
+.chat-wrapper.chat-fullscreen .chat-back{display:flex}
+.chat-wrapper.chat-fullscreen .chat-header{flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top))}
+.chat-wrapper.chat-fullscreen .chat-messages{flex:1;height:auto;min-height:0}
+.chat-wrapper.chat-fullscreen .chat-suggestions{flex-shrink:0}
+.chat-wrapper.chat-fullscreen .chat-input-row{flex-shrink:0;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+.chat-wrapper.chat-fullscreen .chat-controls{flex-shrink:0}
+/* quand le chat est en plein écran, on bloque le scroll de la page derrière */
+body.chat-open{overflow:hidden;position:fixed;width:100%}
+}
+@keyframes chatSlideUp{from{transform:translateY(100%);opacity:.4}to{transform:translateY(0);opacity:1}}
+
 @media (max-width:560px){
 .chat-wrapper{width:100%;margin:0 10px}
 .chat-messages{height:360px}
@@ -369,7 +394,7 @@ footer a{color:var(--gold)}
 
 <section class="hero">
 <div class="container">
-<div class="hero-eyebrow">Phase de lancement · Lyon · 8 cabinets fondateurs</div>
+<div class="hero-eyebrow">Phase de lancement · Lyon · 5 cabinets fondateurs</div>
 <h1>Aucun patient sans réponse, même quand le cabinet est fermé.</h1>
 <p class="hero-tagline">Claire répond aux messages de vos patients directement sur votre site, qualifie leur besoin en quelques questions, puis transmet un résumé clair à votre cabinet : le nom, le motif et l'urgence si besoin. Les demandes du soir et du week-end ne se perdent plus.</p>
 <a href="#demo" class="btn-primary">Voir comment Claire répond à vos patients
@@ -390,6 +415,9 @@ footer a{color:var(--gold)}
 
 <div class="chat-wrapper">
 <div class="chat-header">
+<button class="chat-back" id="chatBackBtn" aria-label="Retour" type="button">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg>
+</button>
 <div class="chat-avatar">C</div>
 <div>
 <div class="chat-header-name">Claire · Cabinet dentaire</div>
@@ -593,14 +621,14 @@ footer a{color:var(--gold)}
 <section class="section section-warm" id="offre">
 <div class="container">
 <div class="section-header">
-<div class="section-eyebrow">Offre fondateurs — limitée à 8 cabinets</div>
+<div class="section-eyebrow">Offre fondateurs — limitée à 5 cabinets</div>
 <h2 class="section-title">Une offre claire, <em>sans surprise.</em></h2>
 </div>
 <div class="price-card">
 <div class="price-tag">Tarif fondateur</div>
 <div class="price-amount">89 €</div>
 <div class="price-period">par mois, pendant 12 mois</div>
-<div class="price-then">Puis 149 € / mois · 8 cabinets fondateurs maximum</div>
+<div class="price-then">Puis 149 € / mois · 5 cabinets fondateurs maximum</div>
 <ul class="price-features">
 <li><span>✓</span> Mise en place et configuration complète incluses.</li>
 <li><span>✓</span> Vous pouvez arrêter après le premier mois si ce n'est pas adapté.</li>
@@ -868,6 +896,50 @@ if (btn) sendMessage(btn.dataset.msg);
 }
 if (resetBtn) resetBtn.addEventListener('click', resetConversation);
 
+/* ===== PLEIN ÉCRAN MOBILE ===== */
+const chatWrapper = document.querySelector('.chat-wrapper');
+const backBtn = document.getElementById('chatBackBtn');
+const MOBILE_BREAKPOINT = 680;
+
+function isMobile(){ return window.matchMedia('(max-width:' + MOBILE_BREAKPOINT + 'px)').matches; }
+
+function openFullscreen(){
+if (!isMobile() || chatWrapper.classList.contains('chat-fullscreen')) return;
+chatWrapper.classList.add('chat-fullscreen');
+document.body.classList.add('chat-open');
+scrollToBottom();
+}
+function closeFullscreen(){
+if (!chatWrapper.classList.contains('chat-fullscreen')) return;
+chatWrapper.classList.remove('chat-fullscreen');
+document.body.classList.remove('chat-open');
+if (input) input.blur();
+}
+
+// On passe en plein écran dès que l'utilisateur entre dans la conversation (mobile uniquement)
+if (input) input.addEventListener('focus', openFullscreen);
+if (suggestionsDiv) suggestionsDiv.addEventListener('click', function(){ openFullscreen(); });
+
+// Bouton retour
+if (backBtn) backBtn.addEventListener('click', closeFullscreen);
+
+// Le bouton "retour" matériel / geste de retour ferme le plein écran avant de quitter la page
+window.addEventListener('popstate', function(){
+if (chatWrapper.classList.contains('chat-fullscreen')) closeFullscreen();
+});
+
+// Si on repasse en grand écran (rotation, redimensionnement), on sort du mode plein écran
+window.addEventListener('resize', function(){
+if (!isMobile()) closeFullscreen();
+});
+
+// Quand le clavier mobile s'ouvre/se ferme, on garde la dernière réponse visible
+if (window.visualViewport) {
+window.visualViewport.addEventListener('resize', function(){
+if (chatWrapper.classList.contains('chat-fullscreen')) scrollToBottom();
+});
+}
+
 document.querySelectorAll('.faq-item').forEach(function(item){
 const btn = item.querySelector('.faq-question');
 if (!btn) return;
@@ -885,3 +957,4 @@ btn.setAttribute('aria-expanded', 'true');
 </script>
 </body>
 </html>
+
